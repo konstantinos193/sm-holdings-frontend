@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -5,6 +6,45 @@ import { HeroWrapper } from '@/components/sections/HeroWrapper'
 import { RecentAdditionsSection } from '@/components/sections/RecentAdditionsSection'
 import { searchPropertiesServer } from '@/lib/api/properties'
 import { Property } from '@/types/property'
+import { OrganizationSchema } from '@/components/seo/OrganizationSchema'
+import { WebsiteSchema } from '@/components/seo/WebsiteSchema'
+import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
+
+const BASE_URL = 'https://smholdings.gr'
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { lang } = await params
+  const isEl = lang === 'el'
+
+  const title = isEl
+    ? 'SMH Real Estate | Ακίνητα στην Ελλάδα — Αρχική'
+    : 'SMH Real Estate | Properties in Greece — Home'
+  const description = isEl
+    ? 'Βρείτε το ιδανικό ακίνητο στην Ελλάδα. Μακροχρόνιες & βραχυχρόνιες μισθώσεις, διαχείριση ακινήτων, επενδυτικές ευκαιρίες. Αξιόπιστος εταίρος στα ακίνητα.'
+    : 'Find your ideal property in Greece. Long-term & short-term rentals, professional property management, and investment opportunities. Your trusted real estate partner.'
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `${BASE_URL}/${lang}`,
+      languages: {
+        'el-GR': `${BASE_URL}/el`,
+        'en-US': `${BASE_URL}/en`,
+        'x-default': `${BASE_URL}/en`,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${BASE_URL}/${lang}`,
+      type: 'website',
+      locale: isEl ? 'el_GR' : 'en_US',
+      images: [{ url: `${BASE_URL}/og-image.png`, width: 1200, height: 630, alt: title }],
+    },
+    twitter: { card: 'summary_large_image', title, description, images: [`${BASE_URL}/og-image.png`] },
+  }
+}
 
 // Dynamically import sections for optimal performance - matching requirements structure
 const IntentionsSection = dynamic(() => import('@/components/sections/IntentionsSection').then(mod => ({ default: mod.IntentionsSection })), { ssr: true })
@@ -39,11 +79,19 @@ async function fetchRecentProperties(): Promise<Property[]> {
 }
 
 export default async function HomePage({ params }: Props) {
-  await params
+  const { lang } = await params
   const recentProperties = await fetchRecentProperties()
+  const isEl = lang === 'el'
+
+  const breadcrumbItems = [
+    { name: isEl ? 'Αρχική' : 'Home', url: `https://smholdings.gr/${lang}` },
+  ]
 
   return (
     <>
+      <OrganizationSchema />
+      <WebsiteSchema />
+      <BreadcrumbSchema items={breadcrumbItems} />
       <Header />
       <main className="flex-1 relative bg-white">
         {/* Landing Page Structure - Optimized for Real Estate Platform */}

@@ -1,11 +1,35 @@
+import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { ResultsContent } from '@/components/results/ResultsContent'
 
+const BASE_URL = 'https://smholdings.gr'
+
 type Props = {
   params: Promise<{ lang: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
+  const { lang } = await params
+  const search = await searchParams
+  const isEl = lang === 'el'
+  const location = typeof search.location === 'string' ? search.location : ''
+
+  const title = isEl
+    ? location ? `Αποτελέσματα για "${location}" | SMH Real Estate` : 'Αποτελέσματα Αναζήτησης | SMH Real Estate'
+    : location ? `Search Results for "${location}" | SMH Real Estate` : 'Property Search Results | SMH Real Estate'
+  const description = isEl
+    ? 'Αποτελέσματα αναζήτησης ακινήτων στην Ελλάδα. Βρείτε το ιδανικό σπίτι, διαμέρισμα ή επενδυτικό ακίνητο.'
+    : 'Property search results in Greece. Find the perfect house, apartment, or investment property with SMH Real Estate.'
+
+  return {
+    title,
+    description,
+    robots: { index: false, follow: false },
+    openGraph: { title, description, url: `${BASE_URL}/${lang}/results`, type: 'website', locale: isEl ? 'el_GR' : 'en_US' },
+  }
 }
 
 export default async function ResultsPage({ params, searchParams }: Props) {

@@ -18,14 +18,41 @@ export const viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: 'SMH Real Estate',
-    template: '%s | SMH Real Estate'
+    default: 'SMH Real Estate | Ακίνητα στην Ελλάδα',
+    template: '%s | SMH Real Estate',
   },
-  description: 'SMH Real Estate - Αξιόπιστη πλατφόρμα ακινήτων με σύγχρονη διαχείριση κρατήσεων | SMH Real Estate - Trusted real estate platform with modern booking management',
-  keywords: ['real estate', 'ακίνητα', 'booking', 'κρατήσεις', 'property management', 'SMH'],
-  authors: [{ name: 'SMH Real Estate' }],
+  description:
+    'SMH Real Estate — Αξιόπιστη πλατφόρμα ακινήτων στην Ελλάδα. Μακροχρόνιες & βραχυχρόνιες μισθώσεις, διαχείριση ακινήτων, επενδύσεις. Trusted Greek real estate: long-term & short-term rentals, property management.',
+  keywords: [
+    'real estate Greece',
+    'ακίνητα Ελλάδα',
+    'rent property Greece',
+    'ενοικίαση ακινήτου',
+    'short-term rental Greece',
+    'βραχυχρόνια μίσθωση',
+    'long-term rental Greece',
+    'μακροχρόνια μίσθωση',
+    'property management Greece',
+    'διαχείριση ακινήτων',
+    'vacation rentals Greece',
+    'SMH Real Estate',
+    'smholdings',
+    'Greek properties',
+    'ελληνικά ακίνητα',
+    'apartments Greece',
+    'διαμερίσματα Ελλάδα',
+    'houses for rent Greece',
+    'σπίτια για ενοικίαση',
+    'investment property Greece',
+    'επενδυτικά ακίνητα',
+    'luxury rentals Greece',
+    'πολυτελείς κατοικίες',
+  ],
+  authors: [{ name: 'SMH Real Estate', url: 'https://smholdings.gr' }],
   creator: 'SMH Real Estate',
   publisher: 'SMH Real Estate',
+  category: 'Real Estate',
+  classification: 'Real Estate / Property Management',
   formatDetection: {
     email: false,
     address: false,
@@ -33,41 +60,59 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL('https://smholdings.gr'),
   alternates: {
-    canonical: '/',
+    canonical: 'https://smholdings.gr/en',
     languages: {
-      'el-GR': '/el',
-      'en-US': '/en',
+      'el-GR': 'https://smholdings.gr/el',
+      'en-US': 'https://smholdings.gr/en',
+      'x-default': 'https://smholdings.gr/en',
     },
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    alternateLocale: 'el_GR',
+    alternateLocale: ['el_GR'],
     url: 'https://smholdings.gr',
-    title: 'SMH Real Estate',
-    description: 'SMH Real Estate - Αξιόπιστη πλατφόρμα ακινήτων με σύγχρονη διαχείριση κρατήσεων | SMH Real Estate - Trusted real estate platform with modern booking management',
+    title: 'SMH Real Estate | Properties in Greece',
+    description:
+      'Discover properties across Greece. Long-term & short-term rentals, property management, and investment consulting — in English and Greek.',
     siteName: 'SMH Real Estate',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'SMH Real Estate — Properties in Greece',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SMH Real Estate',
-    description: 'SMH Real Estate - Αξιόπιστη πλατφόρμα ακινήτων με σύγχρονη διαχείριση κρατήσεων | SMH Real Estate - Trusted real estate platform with modern booking management',
+    site: '@smholdings',
+    title: 'SMH Real Estate | Properties in Greece',
+    description:
+      'Discover properties across Greece. Long-term & short-term rentals, property management, and investment consulting.',
+    images: ['/og-image.png'],
   },
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
+      noimageindex: false,
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
   },
   icons: {
-    icon: '/logoetc.png',
+    icon: [{ url: '/logoetc.png', type: 'image/png' }],
     shortcut: '/logoetc.png',
-    apple: '/logoetc.png',
+    apple: [{ url: '/logoetc.png', sizes: '180x180', type: 'image/png' }],
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ?? '',
   },
 }
 

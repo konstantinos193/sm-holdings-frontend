@@ -1,9 +1,28 @@
+import type { Metadata } from 'next'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 
+const BASE_URL = 'https://smholdings.gr'
+
 type Props = {
   params: Promise<{ lang: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { lang } = await params
+  const isEl = lang === 'el' || lang === 'gr'
+  const title = isEl ? 'Πολιτική Απορρήτου | SMH Real Estate' : 'Privacy Policy | SMH Real Estate'
+  const description = isEl
+    ? 'Διαβάστε την πολιτική απορρήτου της SMH Real Estate. Πληροφορίες για τη συλλογή, χρήση και προστασία των προσωπικών σας δεδομένων.'
+    : 'Read the SMH Real Estate privacy policy. Information on how we collect, use, and protect your personal data in accordance with GDPR.'
+  return {
+    title,
+    description,
+    alternates: { canonical: `${BASE_URL}/${lang}/privacy`, languages: { 'el-GR': `${BASE_URL}/el/privacy`, 'en-US': `${BASE_URL}/en/privacy`, 'x-default': `${BASE_URL}/en/privacy` } },
+    openGraph: { title, description, url: `${BASE_URL}/${lang}/privacy`, type: 'website', locale: isEl ? 'el_GR' : 'en_US' },
+    robots: { index: true, follow: false },
+  }
 }
 
 export default async function PrivacyPage({ params }: Props) {

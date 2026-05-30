@@ -119,7 +119,7 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
 
           {/* Incanto Hotel link */}
           <a
-            href="https://incanto-hotel.com"
+            href="https://lincanto.gr"
             target="_blank"
             rel="noopener noreferrer"
             onClick={onClose}

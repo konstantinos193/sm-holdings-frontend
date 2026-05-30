@@ -6,7 +6,7 @@ import Link from 'next/link'
 export const IncantoHotelButton = () => {
   return (
     <Link 
-      href="https://incanto-hotel.com" 
+      href="https://lincanto.gr"
       target="_blank" 
       rel="noopener noreferrer"
       className="flex items-center gap-3 px-4 py-2.5 bg-slate-900/50 hover:bg-slate-900/70 text-white rounded-lg transition-all duration-200 hover:shadow-lg border border-slate-700/50 hover:border-slate-600 backdrop-blur-sm"

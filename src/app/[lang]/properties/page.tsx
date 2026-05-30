@@ -1,11 +1,33 @@
+import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { PropertiesContent } from '@/components/properties/PropertiesContent'
 
+const BASE_URL = 'https://smholdings.gr'
+
 type Props = {
   params: Promise<{ lang: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { lang } = await params
+  const isEl = lang === 'el'
+  const title = isEl ? 'Ακίνητα στην Ελλάδα | SMH Real Estate' : 'Properties in Greece | SMH Real Estate'
+  const description = isEl
+    ? 'Περιηγηθείτε σε εκατοντάδες ακίνητα στην Ελλάδα. Διαμερίσματα, σπίτια, βίλες για μακροχρόνια & βραχυχρόνια ενοικίαση. Βρείτε το ιδανικό ακίνητο σήμερα.'
+    : 'Browse hundreds of properties in Greece. Apartments, houses, villas for long-term & short-term rental. Find your ideal property today with SMH Real Estate.'
+  return {
+    title,
+    description,
+    keywords: isEl
+      ? ['ακίνητα Ελλάδα', 'διαμερίσματα ενοικίαση', 'σπίτια Ελλάδα', 'βίλες Ελλάδα', 'ενοικίαση ακινήτου', 'SMH Real Estate']
+      : ['properties Greece', 'apartments for rent Greece', 'houses Greece', 'villas Greece', 'property rental Greece', 'SMH Real Estate'],
+    alternates: { canonical: `${BASE_URL}/${lang}/properties`, languages: { 'el-GR': `${BASE_URL}/el/properties`, 'en-US': `${BASE_URL}/en/properties`, 'x-default': `${BASE_URL}/en/properties` } },
+    openGraph: { title, description, url: `${BASE_URL}/${lang}/properties`, type: 'website', locale: isEl ? 'el_GR' : 'en_US', images: [{ url: `${BASE_URL}/og-image.png`, width: 1200, height: 630, alt: title }] },
+    twitter: { card: 'summary_large_image', title, description, images: [`${BASE_URL}/og-image.png`] },
+  }
 }
 
 export default async function PropertiesPage({ params, searchParams }: Props) {

@@ -1,9 +1,28 @@
+import type { Metadata } from 'next'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 
+const BASE_URL = 'https://smholdings.gr'
+
 type Props = {
   params: Promise<{ lang: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { lang } = await params
+  const isEl = lang === 'el' || lang === 'gr'
+  const title = isEl ? 'Όροι Χρήσης | SMH Real Estate' : 'Terms of Service | SMH Real Estate'
+  const description = isEl
+    ? 'Διαβάστε τους όρους χρήσης της πλατφόρμας SMH Real Estate. Πληροφορίες για τα δικαιώματα και τις υποχρεώσεις των χρηστών.'
+    : 'Read the SMH Real Estate terms of service. Information on user rights, obligations, and platform usage conditions.'
+  return {
+    title,
+    description,
+    alternates: { canonical: `${BASE_URL}/${lang}/terms`, languages: { 'el-GR': `${BASE_URL}/el/terms`, 'en-US': `${BASE_URL}/en/terms`, 'x-default': `${BASE_URL}/en/terms` } },
+    openGraph: { title, description, url: `${BASE_URL}/${lang}/terms`, type: 'website', locale: isEl ? 'el_GR' : 'en_US' },
+    robots: { index: true, follow: false },
+  }
 }
 
 export default async function TermsPage({ params }: Props) {
