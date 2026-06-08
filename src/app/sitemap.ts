@@ -5,16 +5,16 @@ const baseUrl = 'https://smholdings.gr'
 const locales = ['en', 'el'] as const
 
 const staticRoutes = [
-  '',
-  '/about',
-  '/contact',
-  '/services',
-  '/team',
-  '/careers',
-  '/incanto',
-  '/properties',
-  '/privacy',
-  '/terms',
+  { path: '', priority: 1.0, changeFreq: 'daily' as const },
+  { path: '/incanto', priority: 0.9, changeFreq: 'weekly' as const },
+  { path: '/properties', priority: 0.9, changeFreq: 'daily' as const },
+  { path: '/about', priority: 0.7, changeFreq: 'monthly' as const },
+  { path: '/contact', priority: 0.7, changeFreq: 'monthly' as const },
+  { path: '/services', priority: 0.6, changeFreq: 'monthly' as const },
+  { path: '/team', priority: 0.6, changeFreq: 'monthly' as const },
+  { path: '/careers', priority: 0.5, changeFreq: 'monthly' as const },
+  { path: '/privacy', priority: 0.3, changeFreq: 'yearly' as const },
+  { path: '/terms', priority: 0.3, changeFreq: 'yearly' as const },
 ]
 
 function buildAlternates(path: string) {
@@ -31,11 +31,11 @@ function buildAlternates(path: string) {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticEntries: MetadataRoute.Sitemap = staticRoutes.flatMap((route) =>
     locales.map((locale) => ({
-      url: `${baseUrl}/${locale}${route}`,
+      url: `${baseUrl}/${locale}${route.path}`,
       lastModified: new Date(),
-      changeFrequency: route === '' ? ('daily' as const) : ('weekly' as const),
-      priority: route === '' ? 1.0 : route === '/properties' ? 0.9 : 0.7,
-      alternates: buildAlternates(route),
+      changeFrequency: route.changeFreq,
+      priority: route.priority,
+      alternates: buildAlternates(route.path),
     }))
   )
 
