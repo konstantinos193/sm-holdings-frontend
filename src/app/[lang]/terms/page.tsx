@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { getDictionary } from '@/lib/i18n/dictionaries'
+import { getSEOKeywords } from '@/lib/seo-keywords'
 
 const BASE_URL = 'https://smholdings.gr'
 
@@ -19,6 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: getSEOKeywords('terms', isEl ? 'el' : 'en'),
     alternates: { canonical: `${BASE_URL}/${lang}/terms`, languages: { 'el-GR': `${BASE_URL}/el/terms`, 'en-US': `${BASE_URL}/en/terms`, 'x-default': `${BASE_URL}/en/terms` } },
     openGraph: { title, description, url: `${BASE_URL}/${lang}/terms`, type: 'website', locale: isEl ? 'el_GR' : 'en_US' },
     robots: { index: true, follow: false },

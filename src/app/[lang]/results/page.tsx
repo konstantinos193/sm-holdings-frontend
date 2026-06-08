@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { ResultsContent } from '@/components/results/ResultsContent'
+import { getSEOKeywords } from '@/lib/seo-keywords'
 
 const BASE_URL = 'https://smholdings.gr'
 
@@ -27,6 +28,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   return {
     title,
     description,
+    keywords: getSEOKeywords('results', isEl ? 'el' : 'en'),
     robots: { index: false, follow: false },
     openGraph: { title, description, url: `${BASE_URL}/${lang}/results`, type: 'website', locale: isEl ? 'el_GR' : 'en_US' },
   }

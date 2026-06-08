@@ -4,6 +4,7 @@ import { IncantoFooter } from '@/components/incanto/IncantoFooter'
 import { IncantoHero } from '@/components/incanto/IncantoHero'
 import { IncantoFacilities } from '@/components/incanto/IncantoFacilities'
 import { IncantoBooking } from '@/components/incanto/IncantoBooking'
+import { getSEOKeywords } from '@/lib/seo-keywords'
 
 const BASE_URL = 'https://smholdings.gr'
 
@@ -21,9 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
-    keywords: isEl
-      ? ['Incanto', 'πολυτελής κατοικία Ελλάδα', 'luxury villa Greece', 'SMH Real Estate', 'βραχυχρόνια μίσθωση πολυτελείας']
-      : ['Incanto', 'luxury property Greece', 'luxury villa rental', 'SMH Real Estate', 'premium short-term rental Greece'],
+    keywords: getSEOKeywords('incanto', isEl ? 'el' : 'en'),
     alternates: { canonical: `${BASE_URL}/${lang}/incanto`, languages: { 'el-GR': `${BASE_URL}/el/incanto`, 'en-US': `${BASE_URL}/en/incanto`, 'x-default': `${BASE_URL}/en/incanto` } },
     openGraph: {
       title,

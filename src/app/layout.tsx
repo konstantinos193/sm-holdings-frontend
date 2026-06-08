@@ -6,6 +6,7 @@ import { HtmlLangUpdater } from '@/components/layout/HtmlLangUpdater'
 import { LanguageProvider } from '@/lib/contexts/LanguageContext'
 import { StatsProvider } from '@/lib/contexts/StatsContext'
 import { AuthInitializer } from '@/components/auth/AuthInitializer'
+import { getGlobalSEOKeywords } from '@/lib/seo-keywords'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,31 +24,7 @@ export const metadata: Metadata = {
   },
   description:
     'SMH Real Estate — Αξιόπιστη πλατφόρμα ακινήτων στην Ελλάδα. Μακροχρόνιες & βραχυχρόνιες μισθώσεις, διαχείριση ακινήτων, επενδύσεις. Trusted Greek real estate: long-term & short-term rentals, property management.',
-  keywords: [
-    'real estate Greece',
-    'ακίνητα Ελλάδα',
-    'rent property Greece',
-    'ενοικίαση ακινήτου',
-    'short-term rental Greece',
-    'βραχυχρόνια μίσθωση',
-    'long-term rental Greece',
-    'μακροχρόνια μίσθωση',
-    'property management Greece',
-    'διαχείριση ακινήτων',
-    'vacation rentals Greece',
-    'SMH Real Estate',
-    'smholdings',
-    'Greek properties',
-    'ελληνικά ακίνητα',
-    'apartments Greece',
-    'διαμερίσματα Ελλάδα',
-    'houses for rent Greece',
-    'σπίτια για ενοικίαση',
-    'investment property Greece',
-    'επενδυτικά ακίνητα',
-    'luxury rentals Greece',
-    'πολυτελείς κατοικίες',
-  ],
+  keywords: [...getGlobalSEOKeywords('en'), ...getGlobalSEOKeywords('el')],
   authors: [{ name: 'SMH Real Estate', url: 'https://smholdings.gr' }],
   creator: 'SMH Real Estate',
   publisher: 'SMH Real Estate',
@@ -60,7 +37,7 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL('https://smholdings.gr'),
   alternates: {
-    canonical: 'https://smholdings.gr/en',
+    canonical: 'https://smholdings.gr',
     languages: {
       'el-GR': 'https://smholdings.gr/el',
       'en-US': 'https://smholdings.gr/en',

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { getDictionary } from '@/lib/i18n/dictionaries'
+import { getSEOKeywords } from '@/lib/seo-keywords'
 
 const BASE_URL = 'https://smholdings.gr'
 
@@ -21,6 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: getSEOKeywords('about', isEl ? 'el' : 'en'),
     alternates: {
       canonical: `${BASE_URL}/${lang}/about`,
       languages: { 'el-GR': `${BASE_URL}/el/about`, 'en-US': `${BASE_URL}/en/about`, 'x-default': `${BASE_URL}/en/about` },

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LanguageProvider } from '@/lib/contexts/LanguageContext'
+import { getGlobalSEOKeywords } from '@/lib/seo-keywords'
 
 const BASE_URL = 'https://smholdings.gr'
 
@@ -20,31 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? 'Αξιόπιστη πλατφόρμα ακινήτων στην Ελλάδα. Μακροχρόνιες & βραχυχρόνιες μισθώσεις, διαχείριση ακινήτων και επενδυτικές ευκαιρίες σε όλη την Ελλάδα.'
     : 'Trusted real estate platform in Greece. Long-term & short-term rentals, property management, and investment opportunities across Greece.'
 
-  const keywords = isEl
-    ? [
-        'ακίνητα Ελλάδα',
-        'ενοικίαση ακινήτου',
-        'βραχυχρόνια μίσθωση',
-        'μακροχρόνια μίσθωση',
-        'διαχείριση ακινήτων',
-        'διαμερίσματα Ελλάδα',
-        'σπίτια για ενοικίαση',
-        'επενδυτικά ακίνητα',
-        'SMH Real Estate',
-        'smholdings',
-      ]
-    : [
-        'real estate Greece',
-        'rent property Greece',
-        'short-term rental Greece',
-        'long-term rental Greece',
-        'property management Greece',
-        'vacation rentals Greece',
-        'apartments Greece',
-        'houses for rent Greece',
-        'investment property Greece',
-        'SMH Real Estate',
-      ]
+  const keywords = getGlobalSEOKeywords(isEl ? 'el' : 'en')
 
   return {
     title: {

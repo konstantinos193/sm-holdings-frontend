@@ -9,6 +9,9 @@ import { Property } from '@/types/property'
 import { OrganizationSchema } from '@/components/seo/OrganizationSchema'
 import { WebsiteSchema } from '@/components/seo/WebsiteSchema'
 import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
+import { FAQSchema } from '@/components/seo/FAQSchema'
+import { LocalBusinessSchema } from '@/components/seo/LocalBusinessSchema'
+import { getSEOKeywords } from '@/lib/seo-keywords'
 
 const BASE_URL = 'https://smholdings.gr'
 
@@ -17,15 +20,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const isEl = lang === 'el'
 
   const title = isEl
-    ? 'SMH Real Estate | Ακίνητα στην Ελλάδα — Αρχική'
-    : 'SMH Real Estate | Properties in Greece — Home'
+    ? 'SMH Properties Greece | SMH Real Estate — Ακίνητα & Ενοικιάσεις'
+    : 'SMH Properties Greece | SMH Real Estate — Properties & Rentals'
   const description = isEl
-    ? 'Βρείτε το ιδανικό ακίνητο στην Ελλάδα. Μακροχρόνιες & βραχυχρόνιες μισθώσεις, διαχείριση ακινήτων, επενδυτικές ευκαιρίες. Αξιόπιστος εταίρος στα ακίνητα.'
-    : 'Find your ideal property in Greece. Long-term & short-term rentals, professional property management, and investment opportunities. Your trusted real estate partner.'
+    ? 'SMH Properties: Εξειδικευμένη ενοικίαση ακινήτων σε όλη την Ελλάδα. Μακροχρόνιες & βραχυχρόνιες μισθώσεις, διαχείριση ακινήτων. SMH Real Estate αξιοπιστία.'
+    : 'SMH Properties: Specialized property rentals across Greece. Long-term & short-term rentals, property management. SMH Real Estate trusted service.'
 
   return {
     title,
     description,
+    keywords: getSEOKeywords('home', isEl ? 'el' : 'en'),
     alternates: {
       canonical: `${BASE_URL}/${lang}`,
       languages: {
@@ -91,7 +95,9 @@ export default async function HomePage({ params }: Props) {
     <>
       <OrganizationSchema />
       <WebsiteSchema />
+      <LocalBusinessSchema />
       <BreadcrumbSchema items={breadcrumbItems} />
+      <FAQSchema lang={isEl ? 'el' : 'en'} />
       <Header />
       <main className="flex-1 relative bg-white">
         {/* Landing Page Structure - Optimized for Real Estate Platform */}

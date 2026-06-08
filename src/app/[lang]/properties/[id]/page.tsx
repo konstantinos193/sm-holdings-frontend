@@ -9,6 +9,7 @@ import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
 import { PropertySchema } from '@/components/seo/PropertySchema'
 import { serverFetch } from '@/lib/api/server'
 import type { Property } from '@/types/property'
+import { getSEOKeywords } from '@/lib/seo-keywords'
 
 const BASE_URL = 'https://smholdings.gr'
 
@@ -53,9 +54,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${title} | SMH Real Estate`,
     description,
-    keywords: isEl
-      ? [title, property.city, 'ενοικίαση ακινήτου', 'SMH Real Estate', property.type.toLowerCase()]
-      : [title, property.city, 'property rental Greece', 'SMH Real Estate', property.type.toLowerCase()],
+    keywords: getSEOKeywords('propertyDetail', isEl ? 'el' : 'en', {
+      title,
+      city: property.city,
+      propertyType: property.type
+    }),
     alternates: {
       canonical: `${BASE_URL}/${lang}/properties/${id}`,
       languages: {
