@@ -9,8 +9,7 @@ export default function manifest(): MetadataRoute.Manifest {
     display: 'standalone',
     background_color: '#ffffff',
     theme_color: '#1e3a5f',
-    orientation: 'portrait-primary',
-    lang: 'en',
+    orientation: 'portrait',
     icons: [
       {
         src: '/logoetc.png',
@@ -25,7 +24,5 @@ export default function manifest(): MetadataRoute.Manifest {
         purpose: 'any',
       },
     ],
-    categories: ['real estate', 'travel', 'business'],
-    screenshots: [],
   }
 }

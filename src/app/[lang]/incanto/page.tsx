@@ -15,10 +15,10 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params
   const isEl = lang === 'el' || lang === 'gr'
-  const title = isEl ? 'Incanto | Πολυτελής Κατοικία | SMH Real Estate' : 'Incanto | Luxury Property | SMH Real Estate'
+  const title = isEl ? 'Incanto Greece | Πολυτελής Βίλα Ενοικίαση | SMH Real Estate' : 'Incanto Greece | Luxury Villa Rental | SMH Real Estate'
   const description = isEl
-    ? 'Ανακαλύψτε το Incanto — μια εξαιρετική πολυτελής κατοικία στην Ελλάδα. Βιώστε μοναδική πολυτέλεια και άνεση με υπηρεσίες υψηλού επιπέδου.'
-    : 'Discover Incanto — an exceptional luxury property in Greece. Experience unparalleled comfort and elegance with premium hospitality services.'
+    ? 'Incanto: Αποκλειστική πολυτελής βίλα στην Ελλάδα για ενοικίαση. Premium βραχυχρόνια μίσθωση με παροχές 5 αστέρων. Κάντε κράτηση για αξέχαστες διακοπές.'
+    : 'Incanto: Exclusive luxury villa in Greece for rent. Premium short-term rental with 5-star amenities. Book for an unforgettable vacation experience.'
   return {
     title,
     description,

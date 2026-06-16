@@ -72,6 +72,47 @@ export const Footer = () => {
             </ul>
           </div>
 
+          {/* Properties Links */}
+          <div>
+            <h3 className="text-white font-semibold text-lg mb-6">
+              {language === 'el' ? 'Ακίνητα' : 'Properties'}
+            </h3>
+            <ul className="space-y-3">
+              <li>
+                <Link
+                  href={`/${language}/properties`}
+                  className="text-gray-400 hover:text-accent-blue transition-colors duration-200 text-sm"
+                >
+                  {language === 'el' ? 'Όλα τα Ακίνητα' : 'All Properties'}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={`/${language}/locations`}
+                  className="text-gray-400 hover:text-accent-blue transition-colors duration-200 text-sm"
+                >
+                  {language === 'el' ? 'Ακίνητα ανά Τοποθεσία' : 'Properties by Location'}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={`/${language}/property-types`}
+                  className="text-gray-400 hover:text-accent-blue transition-colors duration-200 text-sm"
+                >
+                  {language === 'el' ? 'Τύποι Ακινήτων' : 'Property Types'}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={`/${language}/incanto`}
+                  className="text-gray-400 hover:text-accent-blue transition-colors duration-200 text-sm"
+                >
+                  Incanto
+                </Link>
+              </li>
+            </ul>
+          </div>
+
           {/* Services Links */}
           <div>
             <h3 className="text-white font-semibold text-lg mb-6">
@@ -79,36 +120,36 @@ export const Footer = () => {
             </h3>
             <ul className="space-y-3">
               <li>
-                <a
-                  href="#"
+                <Link
+                  href={`/${language}/services`}
                   className="text-gray-400 hover:text-accent-blue transition-colors duration-200 text-sm"
                 >
                   {t('footer.links.propertyManagement')}
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  href={`/${language}/services`}
                   className="text-gray-400 hover:text-accent-blue transition-colors duration-200 text-sm"
                 >
                   {t('footer.links.investmentConsulting')}
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  href={`/${language}/properties`}
                   className="text-gray-400 hover:text-accent-blue transition-colors duration-200 text-sm"
                 >
                   {t('footer.links.realEstate')}
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  href={`/${language}/contact`}
                   className="text-gray-400 hover:text-accent-blue transition-colors duration-200 text-sm"
                 >
                   {t('footer.links.maintenance')}
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

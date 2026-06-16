@@ -11,6 +11,7 @@ import { WebsiteSchema } from '@/components/seo/WebsiteSchema'
 import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
 import { FAQSchema } from '@/components/seo/FAQSchema'
 import { LocalBusinessSchema } from '@/components/seo/LocalBusinessSchema'
+import { SearchActionSchema } from '@/components/seo/SearchActionSchema'
 import { getSEOKeywords } from '@/lib/seo-keywords'
 
 const BASE_URL = 'https://smholdings.gr'
@@ -20,11 +21,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const isEl = lang === 'el'
 
   const title = isEl
-    ? 'SMH Properties Greece | SMH Real Estate — Ακίνητα & Ενοικιάσεις'
-    : 'SMH Properties Greece | SMH Real Estate — Properties & Rentals'
+    ? 'Ακίνητα Ελλάδα | SMH Real Estate — Ενοικιάσεις & Διαχείριση Ακινήτων'
+    : 'Real Estate Greece | SMH Real Estate — Properties & Rentals | Find Your Home'
   const description = isEl
-    ? 'SMH Properties: Εξειδικευμένη ενοικίαση ακινήτων σε όλη την Ελλάδα. Μακροχρόνιες & βραχυχρόνιες μισθώσεις, διαχείριση ακινήτων. SMH Real Estate αξιοπιστία.'
-    : 'SMH Properties: Specialized property rentals across Greece. Long-term & short-term rentals, property management. SMH Real Estate trusted service.'
+    ? 'Ανακαλύψτε τα καλύτερα ακίνητα στην Ελλάδα με SMH Real Estate. Μακροχρόνιες & βραχυχρόνιες ενοικιάσεις, διαχείριση ακινήτων. Εξειδικευμένο μεσιτικό γραφείο σε όλη την Ελλάδα.'
+    : 'Discover the best properties in Greece with SMH Real Estate. Long-term & short-term rentals, property management. Specialized real estate agency across Greece. Book your perfect home today!'
 
   return {
     title,
@@ -96,6 +97,7 @@ export default async function HomePage({ params }: Props) {
       <OrganizationSchema />
       <WebsiteSchema />
       <LocalBusinessSchema />
+      <SearchActionSchema baseUrl={BASE_URL} lang={isEl ? 'el' : 'en'} />
       <BreadcrumbSchema items={breadcrumbItems} />
       <FAQSchema lang={isEl ? 'el' : 'en'} />
       <Header />

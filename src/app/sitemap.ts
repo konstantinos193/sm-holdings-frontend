@@ -8,6 +8,8 @@ const staticRoutes = [
   { path: '', priority: 1.0, changeFreq: 'daily' as const },
   { path: '/incanto', priority: 0.9, changeFreq: 'weekly' as const },
   { path: '/properties', priority: 0.9, changeFreq: 'daily' as const },
+  { path: '/locations', priority: 0.8, changeFreq: 'weekly' as const },
+  { path: '/property-types', priority: 0.8, changeFreq: 'weekly' as const },
   { path: '/about', priority: 0.7, changeFreq: 'monthly' as const },
   { path: '/contact', priority: 0.7, changeFreq: 'monthly' as const },
   { path: '/services', priority: 0.6, changeFreq: 'monthly' as const },
@@ -29,7 +31,7 @@ function buildAlternates(path: string) {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticEntries: MetadataRoute.Sitemap = staticRoutes.flatMap((route) =>
+  const staticEntries = staticRoutes.flatMap((route) =>
     locales.map((locale) => ({
       url: `${baseUrl}/${locale}${route.path}`,
       lastModified: new Date(),
@@ -39,7 +41,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
   )
 
-  let propertyEntries: MetadataRoute.Sitemap = []
+  let propertyEntries: Array<{
+  url: string
+  lastModified: Date
+  changeFrequency: 'weekly'
+  priority: number
+  alternates: { languages: Record<string, string> }
+}> = []
   try {
     const response = await serverFetch<{
       success: boolean
@@ -61,5 +69,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // silently skip property entries if API is unavailable
   }
 
-  return [...staticEntries, ...propertyEntries]
+  return [...staticEntries, ...propertyEntries] as unknown as MetadataRoute.Sitemap
 }

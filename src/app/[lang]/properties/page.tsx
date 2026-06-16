@@ -15,10 +15,10 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params
   const isEl = lang === 'el'
-  const title = isEl ? 'Ακίνητα στην Ελλάδα | SMH Real Estate' : 'Properties in Greece | SMH Real Estate'
+  const title = isEl ? 'Ενοικίαση Ακινήτων Ελλάδα | Διαμερίσματα & Βίλες | SMH Real Estate' : 'Property Rentals Greece | Apartments & Villas | SMH Real Estate'
   const description = isEl
-    ? 'Περιηγηθείτε σε εκατοντάδες ακίνητα στην Ελλάδα. Διαμερίσματα, σπίτια, βίλες για μακροχρόνια & βραχυχρόνια ενοικίαση. Βρείτε το ιδανικό ακίνητο σήμερα.'
-    : 'Browse hundreds of properties in Greece. Apartments, houses, villas for long-term & short-term rental. Find your ideal property today with SMH Real Estate.'
+    ? 'Εξερευνήστε 100+ ακίνητα για ενοικίαση σε όλη την Ελλάδα. Διαμερίσματα, σπίτια, βίλες. Μακροχρόνιες & βραχυχρόνιες μισθώσεις. Κάντε κράτηση online σήμερα!'
+    : 'Explore 100+ properties for rent across Greece. Apartments, houses, villas. Long-term & short-term rentals. Online booking available. Find your perfect home today!'
   return {
     title,
     description,

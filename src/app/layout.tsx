@@ -7,6 +7,9 @@ import { LanguageProvider } from '@/lib/contexts/LanguageContext'
 import { StatsProvider } from '@/lib/contexts/StatsContext'
 import { AuthInitializer } from '@/components/auth/AuthInitializer'
 import { getGlobalSEOKeywords } from '@/lib/seo-keywords'
+import { WebVitalsReport } from '@/components/seo/WebVitalsReport'
+import { reportWebVitals } from '@/lib/web-vitals'
+import { MobileOptimization } from '@/components/seo/MobileOptimization'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -98,16 +101,24 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  // Report Web Vitals
+  if (typeof window !== 'undefined') {
+    reportWebVitals()
+  }
+
   return (
     <html lang="en" className="scroll-smooth">
       <body className={inter.className}>
-        <LanguageProvider initialLanguage="en">
-          <StatsProvider>
-            <AuthInitializer />
-            <HtmlLangUpdater />
-            {children}
-          </StatsProvider>
-        </LanguageProvider>
+        <MobileOptimization>
+          <LanguageProvider initialLanguage="en">
+            <StatsProvider>
+              <AuthInitializer />
+              <HtmlLangUpdater />
+              {children}
+              <WebVitalsReport />
+            </StatsProvider>
+          </LanguageProvider>
+        </MobileOptimization>
       </body>
     </html>
   )
