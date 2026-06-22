@@ -21,10 +21,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const isEl = lang === 'el'
 
   const title = isEl
-    ? 'Ακίνητα Ελλάδα | SMH Real Estate — Ενοικιάσεις & Διαχείριση Ακινήτων'
-    : 'Real Estate Greece | SMH Real Estate — Properties & Rentals | Find Your Home'
+    ? 'Ακίνητα Ελλάδα | SMH Real Estate — Βρείτε το Σπίτι σας Σήμερα'
+    : 'Real Estate Greece | SMH Real Estate — Find Your Perfect Home Today'
   const description = isEl
-    ? 'Ανακαλύψτε τα καλύτερα ακίνητα στην Ελλάδα με SMH Real Estate. Μακροχρόνιες & βραχυχρόνιες ενοικιάσεις, διαχείριση ακινήτων. Εξειδικευμένο μεσιτικό γραφείο σε όλη την Ελλάδα.'
+    ? 'Ανακαλύψτε τα καλύτερα ακίνητα στην Ελλάδα με SMH Real Estate. Μακροχρόνιες & βραχυχρόνιες ενοικιάσεις, διαχείριση ακινήτων. Εξειδικευμένο μεσιτικό γραφείο σε όλη την Ελλάδα. Κλείστε το σπίτι σας σήμερα!'
     : 'Discover the best properties in Greece with SMH Real Estate. Long-term & short-term rentals, property management. Specialized real estate agency across Greece. Book your perfect home today!'
 
   return {

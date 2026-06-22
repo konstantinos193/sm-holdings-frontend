@@ -4,6 +4,11 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
+  // Exclude technical files from locale redirection
+  if (pathname === '/sitemap.xml' || pathname === '/robots.txt' || pathname === '/manifest.json') {
+    return NextResponse.next()
+  }
+
   // Check if there is any supported locale in the pathname
   const isMissingLocale = !pathname.startsWith('/en') && !pathname.startsWith('/el')
 

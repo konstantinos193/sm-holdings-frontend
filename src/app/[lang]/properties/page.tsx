@@ -4,6 +4,8 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { PropertiesContent } from '@/components/properties/PropertiesContent'
 import { getSEOKeywords } from '@/lib/seo-keywords'
+import { RealEstateListingSchema } from '@/components/seo/RealEstateListingSchema'
+import { serverFetch } from '@/lib/api/server'
 
 const BASE_URL = 'https://smholdings.gr'
 
@@ -32,9 +34,49 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PropertiesPage({ params, searchParams }: Props) {
   const { lang } = await params
   const search = await searchParams
+  const isEl = lang === 'el'
+
+  // Fetch properties for schema
+  let propertiesForSchema: Array<{
+    id: string
+    titleEn: string
+    titleGr: string
+    city: string
+    propertyType: string
+    price: number
+    bedrooms?: number
+    bathrooms?: number
+    area?: number
+    image?: string
+    description?: string
+  }> = []
+
+  try {
+    const response = await serverFetch<{ success: boolean; data: { properties: any[] } }>(
+      '/properties?limit=20&page=1'
+    )
+    if (response.success) {
+      propertiesForSchema = response.data.properties.map((p: any) => ({
+        id: p.id,
+        titleEn: p.titleEn,
+        titleGr: p.titleGr,
+        city: p.city,
+        propertyType: p.type,
+        price: p.basePrice,
+        bedrooms: p.bedrooms,
+        bathrooms: p.bathrooms,
+        area: p.area,
+        image: p.images[0],
+        description: isEl ? p.descriptionGr : p.descriptionEn,
+      }))
+    }
+  } catch {
+    // Silently fail if API is unavailable
+  }
 
   return (
     <>
+      <RealEstateListingSchema properties={propertiesForSchema} lang={isEl ? 'el' : 'en'} />
       <Header />
       <main className="flex-1 min-h-screen bg-gray-50">
         <Suspense fallback={<PropertiesLoadingSkeleton />}>

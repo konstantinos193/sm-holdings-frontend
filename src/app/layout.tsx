@@ -10,6 +10,7 @@ import { getGlobalSEOKeywords } from '@/lib/seo-keywords'
 import { WebVitalsReport } from '@/components/seo/WebVitalsReport'
 import { reportWebVitals } from '@/lib/web-vitals'
 import { MobileOptimization } from '@/components/seo/MobileOptimization'
+import { GoogleAnalytics } from '@/components/seo/GoogleAnalytics'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -109,6 +110,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={inter.className}>
+        <GoogleAnalytics />
         <MobileOptimization>
           <LanguageProvider initialLanguage="en">
             <StatsProvider>
