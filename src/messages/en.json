@@ -6,6 +6,11 @@
     "rentLongTerm": "Long-term",
     "editions": "20 Editions",
     "services": "Services",
+    "propertyManagement": "Property Management",
+    "realEstate": "Real Estate",
+    "owners": "Owners",
+    "insights": "Insights",
+    "contact": "Contact",
     "properties": "Properties",
     "booking": "Booking",
     "about": "About",
@@ -14,6 +19,8 @@
     "greek": "Greek"
   },
   "hero": {
+    "headline": "Property Management & Rentals in Greece",
+    "tagline": "SMH Real Estate manages, rents and maintains residential properties for owners and guests across Greece — from our base in Filippiada, Preveza.",
     "title": "Find Your",
     "titleHighlight": "Property",
     "description": "Your trusted real estate partner in Greece. Rent properties with confidence.",
@@ -123,7 +130,7 @@
     "enabled": "Enabled",
     "disabled": "Disabled"
   },
-    "common": {
+  "common": {
     "loading": "Loading...",
     "error": "Error",
     "success": "Success",
@@ -195,7 +202,7 @@
       "email": "Email",
       "phone": "Phone",
       "phoneOptional": "Phone (optional)",
-      "phonePlaceholder": "+1 XXX XXX XXXX",
+      "phonePlaceholder": "+30 6912345678",
       "specialRequests": "Special Requests",
       "specialRequestsOptional": "Special Requests (optional)",
       "specialRequestsPlaceholder": "Tell us if you need anything special...",
@@ -230,30 +237,42 @@
     "phone": "Phone",
     "mobilePhone": "Mobile",
     "email": "Email",
-    "addressValue": "Al. Panagouli 2, Filippiada PC 48200",
+    "addressValue": "A. Panagouli 2, Filippiada 48200",
     "phoneValue": "+30 2683 022 484",
     "mobilePhoneValue": "+30 6984132555",
     "emailValue": "smholdings.gr@gmail.com",
     "sections": {
       "company": "Company",
-      "services": "Services",
+      "services": "Property Management",
+      "realEstate": "Real Estate",
       "support": "Support"
     },
     "links": {
-      "aboutUs": "About Us",
-      "ourTeam": "Our Team",
+      "aboutUs": "About SM Holdings",
+      "ourTeam": "The people",
       "careers": "Careers",
       "contact": "Contact",
-      "propertyManagement": "Property Management",
-      "investmentConsulting": "Investment Consulting",
-      "realEstate": "Real Estate",
+      "owners": "For property owners",
+      "insights": "Insights for owners",
+      "propertyManagement": "Property management",
+      "shortTerm": "Short-term rental management",
+      "longTerm": "Long-term property management",
+      "ownerReporting": "Owner reporting",
+      "allServices": "All services",
+      "investmentConsulting": "Investment in Preveza",
+      "realEstate": "Real estate services",
+      "valuation": "Rental valuation",
+      "properties": "Properties for rent",
+      "preveza": "Preveza",
+      "lincanto": "L'Incanto Apartments",
       "maintenance": "Maintenance",
       "helpCenter": "Help Center",
       "faq": "FAQ",
       "termsOfService": "Terms of Service",
       "privacyPolicy": "Privacy Policy"
     },
-    "copyrightName": "adinfinity",
+    "copyrightName": "S. M. HOLDINGS Ε.Ε.",
+    "websiteBy": "Website by",
     "allRightsReserved": "All rights reserved."
   },
   "search": {
@@ -303,12 +322,13 @@
     "seaView": "Sea View"
   },
   "servicesOverview": {
-    "title": "What We Offer",
-    "subtitle": "Comprehensive real estate solutions for property management",
+    "title": "Real Estate & Property Management Services in Greece",
+    "subtitle": "Rental management, bookings, maintenance and investment advice for property owners across Greece",
     "getStarted": "Get Started Today",
     "getStartedDescription": "Contact us to learn how we can help you achieve your real estate goals",
     "exploreProperties": "Explore Properties",
-    "listProperty": "List Your Property"
+    "listProperty": "List Your Property",
+    "makeBooking": "Make a Booking"
   },
   "features": {
     "title": "Why Choose Us?",
@@ -384,28 +404,6 @@
   "team": {
     "title": "Our Team",
     "subtitle": "Meet the experienced professionals dedicated to helping you achieve your real estate goals.",
-    "members": {
-      "member1": {
-        "name": "John Smith",
-        "role": "Founder & CEO",
-        "bio": "With over 15 years of experience in real estate, John leads our team with vision and dedication."
-      },
-      "member2": {
-        "name": "Jane Doe",
-        "role": "Property Management Director",
-        "bio": "Jane specializes in property management and ensures our properties are maintained to the highest standards."
-      },
-      "member3": {
-        "name": "Mike Johnson",
-        "role": "Sales & Marketing Manager",
-        "bio": "Mike brings extensive market knowledge and helps clients find their perfect property match."
-      },
-      "member4": {
-        "name": "Sarah Williams",
-        "role": "Customer Relations Specialist",
-        "bio": "Sarah ensures exceptional customer service and maintains strong relationships with our clients."
-      }
-    },
     "expertise": {
       "realEstate": "Real Estate",
       "investment": "Investment Consulting",
@@ -445,29 +443,6 @@
       "title": "Open Positions",
       "subtitle": "Explore our current job openings"
     },
-    "jobs": {
-      "job1": {
-        "title": "Real Estate Agent",
-        "department": "Sales",
-        "location": "Remote / Office",
-        "type": "Full-time",
-        "description": "We are looking for an experienced real estate agent to join our sales team. The ideal candidate will have a strong track record in property sales and excellent communication skills."
-      },
-      "job2": {
-        "title": "Property Manager",
-        "department": "Operations",
-        "location": "Office",
-        "type": "Full-time",
-        "description": "Join our operations team as a property manager. You will be responsible for overseeing property maintenance, tenant relations, and ensuring properties meet our quality standards."
-      },
-      "job3": {
-        "title": "Marketing Specialist",
-        "department": "Marketing",
-        "location": "Remote / Office",
-        "type": "Full-time",
-        "description": "We are seeking a creative marketing specialist to help promote our properties and services. Experience with digital marketing and real estate is preferred."
-      }
-    },
     "noOpenings": "No open positions at the moment. Please check back later.",
     "apply": "Apply Now",
     "applicationForm": {
@@ -480,9 +455,9 @@
       "lastName": "Last Name",
       "lastNamePlaceholder": "Doe",
       "email": "Email",
-      "emailPlaceholder": "john.doe@example.com",
+      "emailPlaceholder": "name@email.com",
       "phone": "Phone (Optional)",
-      "phonePlaceholder": "+1 XXX XXX XXXX",
+      "phonePlaceholder": "+30 6912345678",
       "position": "Position of Interest",
       "positionPlaceholder": "e.g., Real Estate Agent",
       "message": "Cover Letter / Message",
@@ -498,13 +473,13 @@
     "info": {
       "title": "Get in Touch",
       "addressLabel": "Address",
-      "address": "123 Main Street, Suite 100, City, State 12345",
+      "address": "A. Panagouli 2, Filippiada 48200, Preveza, Greece",
       "phoneLabel": "Phone",
-      "phone": "+1 (234) 567-8900",
+      "phone": "+30 2683 022 484",
       "emailLabel": "Email",
-      "email": "info@example.com",
+      "email": "smholdings.gr@gmail.com",
       "hoursLabel": "Business Hours",
-      "hours": "Monday - Friday: 9:00 AM - 6:00 PM\nSaturday: 10:00 AM - 4:00 PM\nSunday: Closed"
+      "hours": "Tuesday & Thursday: 9:00 AM - 1:00 PM\nOther days: closed"
     },
     "form": {
       "title": "Send us a Message",
@@ -513,9 +488,9 @@
       "lastName": "Last Name",
       "lastNamePlaceholder": "Doe",
       "email": "Email",
-      "emailPlaceholder": "john.doe@example.com",
+      "emailPlaceholder": "name@email.com",
       "phone": "Phone (Optional)",
-      "phonePlaceholder": "+1 XXX XXX XXXX",
+      "phonePlaceholder": "+30 6912345678",
       "subject": "Subject",
       "subjectPlaceholder": "How can we help you?",
       "message": "Message",
@@ -572,7 +547,7 @@
     },
     "section9": {
       "title": "9. Contact Information",
-      "content": "If you have any questions about these Terms of Service, please contact us at legal@example.com or through our contact page."
+      "content": "If you have any questions about these Terms of Service, please contact us at smholdings.gr@gmail.com or through our contact page."
     }
   },
   "privacy": {
@@ -647,8 +622,7 @@
     },
     "section10": {
       "title": "10. Contact Us",
-      "content": "If you have any questions about this Privacy Policy, please contact us at privacy@example.com or through our contact page."
+      "content": "If you have any questions about this Privacy Policy, please contact us at smholdings.gr@gmail.com or through our contact page."
     }
   }
 }
-

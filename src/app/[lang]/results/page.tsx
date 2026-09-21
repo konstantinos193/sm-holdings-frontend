@@ -26,7 +26,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
     : 'Property search results in Greece. Find the perfect house, apartment, or investment property with SMH Real Estate.'
 
   return {
-    title,
+    title: { absolute: title },
     description,
     keywords: getSEOKeywords('results', isEl ? 'el' : 'en'),
     robots: { index: false, follow: false },

@@ -6,13 +6,15 @@ import { HtmlLangUpdater } from '@/components/layout/HtmlLangUpdater'
 import { LanguageProvider } from '@/lib/contexts/LanguageContext'
 import { StatsProvider } from '@/lib/contexts/StatsContext'
 import { AuthInitializer } from '@/components/auth/AuthInitializer'
-import { getGlobalSEOKeywords } from '@/lib/seo-keywords'
 import { WebVitalsReport } from '@/components/seo/WebVitalsReport'
 import { reportWebVitals } from '@/lib/web-vitals'
 import { MobileOptimization } from '@/components/seo/MobileOptimization'
 import { GoogleAnalytics } from '@/components/seo/GoogleAnalytics'
+import { BASE_URL, BUSINESS } from '@/lib/seo/business'
 
-const inter = Inter({ subsets: ['latin'] })
+// Greek subset: without it Greek pages render in a fallback font until the
+// browser fetches glyphs Inter does not ship in the latin subset (CLS + FOUT).
+const inter = Inter({ subsets: ['latin', 'greek'], display: 'swap' })
 
 export const viewport = {
   width: 'device-width',
@@ -21,71 +23,46 @@ export const viewport = {
   userScalable: true,
 }
 
+const DEFAULT_TITLE = 'Property Management & Real Estate in Preveza | SM Holdings'
+const DEFAULT_DESCRIPTION =
+  'SM Holdings provides property management, short-term rental operations, real estate and hospitality services in Preveza, Greece.'
+
 export const metadata: Metadata = {
+  metadataBase: new URL(BASE_URL),
   title: {
-    default: 'SMH Real Estate | Ακίνητα στην Ελλάδα',
-    template: '%s | SMH Real Estate',
+    default: DEFAULT_TITLE,
+    template: `%s | ${BUSINESS.name}`,
   },
-  description:
-    'SMH Real Estate — Αξιόπιστη πλατφόρμα ακινήτων στην Ελλάδα. Μακροχρόνιες & βραχυχρόνιες μισθώσεις, διαχείριση ακινήτων, επενδύσεις. Trusted Greek real estate: long-term & short-term rentals, property management.',
-  keywords: [...getGlobalSEOKeywords('en'), ...getGlobalSEOKeywords('el')],
-  authors: [{ name: 'SMH Real Estate', url: 'https://smholdings.gr' }],
-  creator: 'SMH Real Estate',
-  publisher: 'SMH Real Estate',
+  description: DEFAULT_DESCRIPTION,
+  applicationName: BUSINESS.name,
+  authors: [{ name: BUSINESS.name, url: BASE_URL }],
+  creator: BUSINESS.name,
+  publisher: BUSINESS.legalName,
   category: 'Real Estate',
-  classification: 'Real Estate / Property Management',
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  metadataBase: new URL('https://smholdings.gr'),
-  alternates: {
-    canonical: 'https://smholdings.gr',
-    languages: {
-      'el-GR': 'https://smholdings.gr/el',
-      'en-US': 'https://smholdings.gr/en',
-      'x-default': 'https://smholdings.gr/en',
-    },
-  },
+  formatDetection: { email: false, address: false, telephone: false },
+  // No `alternates` here on purpose: canonical + hreflang are set per page.
+  // A layout-level canonical would be inherited by any page that forgets its
+  // own and silently tell Google that page is a duplicate of the home page.
   openGraph: {
     type: 'website',
     locale: 'en_US',
     alternateLocale: ['el_GR'],
-    url: 'https://smholdings.gr',
-    title: 'SMH Real Estate | Properties in Greece',
-    description:
-      'Discover properties across Greece. Long-term & short-term rentals, property management, and investment consulting — in English and Greek.',
-    siteName: 'SMH Real Estate',
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'SMH Real Estate — Properties in Greece',
-      },
-    ],
+    url: BASE_URL,
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    siteName: BUSINESS.name,
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'SM Holdings — Property Management & Real Estate in Preveza' }],
   },
   twitter: {
     card: 'summary_large_image',
-    site: '@smholdings',
-    title: 'SMH Real Estate | Properties in Greece',
-    description:
-      'Discover properties across Greece. Long-term & short-term rentals, property management, and investment consulting.',
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
     images: ['/og-image.png'],
   },
   robots: {
     index: true,
     follow: true,
-    nocache: false,
-    googleBot: {
-      index: true,
-      follow: true,
-      noimageindex: false,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
+    googleBot: { index: true, follow: true, 'max-video-preview': -1, 'max-image-preview': 'large', 'max-snippet': -1 },
   },
   icons: {
     icon: [{ url: '/logoetc.png', type: 'image/png' }],

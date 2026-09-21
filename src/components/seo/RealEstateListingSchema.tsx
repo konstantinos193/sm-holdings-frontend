@@ -1,3 +1,4 @@
+import { absoluteUrl, localePath, propertyPath } from '@/lib/seo/routes'
 interface RealEstateListingSchemaProps {
   properties: Array<{
     id: string
@@ -23,7 +24,7 @@ export function RealEstateListingSchema({ properties, lang }: RealEstateListingS
     description: lang === 'el' 
       ? 'Λίστα ακινήτων προς ενοικίαση από την SMH Properties στην Ελλάδα'
       : 'List of rental properties from SMH Properties in Greece',
-    url: `https://smholdings.gr/${lang}/properties`,
+    url: absoluteUrl(localePath(lang, 'properties')),
     numberOfItems: properties.length,
     itemListElement: properties.map((property, index) => ({
       '@type': 'ListItem',
@@ -32,7 +33,7 @@ export function RealEstateListingSchema({ properties, lang }: RealEstateListingS
         '@type': ['Product', 'RealEstateListing'],
         name: lang === 'el' ? property.titleGr : property.titleEn,
         description: property.description || (lang === 'el' ? property.titleGr : property.titleEn),
-        url: `https://smholdings.gr/${lang}/properties/${property.id}`,
+        url: absoluteUrl(propertyPath(lang, { id: property.id, titleEn: property.titleEn, titleGr: property.titleGr, city: property.city })),
         image: property.image,
         offers: {
           '@type': 'Offer',

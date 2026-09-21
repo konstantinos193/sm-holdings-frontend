@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { clsx } from 'clsx'
 import { useLanguage } from '@/lib/contexts/LanguageContext'
 import { useTranslation } from '@/lib/hooks/useTranslation'
+import { localePath } from '@/lib/seo/routes'
+import { NAV_ITEMS } from './Navigation'
 
 interface MobileMenuProps {
   isOpen: boolean
@@ -17,13 +18,6 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   const pathname = usePathname()
   const { language } = useLanguage()
   const t = useTranslation()
-  const [rentOpen, setRentOpen] = useState(false)
-
-  const navigationItems = [
-    { id: 'services', labelKey: 'navigation.services', href: '/services' },
-    { id: 'about', labelKey: 'navigation.about', href: '/about' }
-  ]
-
   if (!isOpen) {
     return null
   }
@@ -50,7 +44,7 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
         <div className="px-4 pt-2 pb-6 space-y-1 max-h-[calc(90vh-60px)] overflow-y-auto overscroll-contain">
           {/* Home */}
           <Link
-            href={`/${language}/`}
+            href={localePath(language, 'home')}
             onClick={onClose}
             className={clsx(
               'block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 active:scale-[0.98]',
@@ -62,49 +56,12 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
             {t('navigation.home')}
           </Link>
 
-          {/* Ενοικίαση ακινήτων – expandable (Short-term / Long-term) */}
-          <div className="rounded-lg overflow-hidden">
-            <button
-              type="button"
-              onClick={() => setRentOpen(!rentOpen)}
-              className="w-full flex items-center justify-between px-4 py-3 text-base font-medium text-gray-300 active:bg-gray-900 active:text-white transition-all duration-200 text-left"
-            >
-              {t('navigation.rent')}
-              <svg
-                className={clsx('w-5 h-5 shrink-0 transition-transform', rentOpen && 'rotate-180')}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            {rentOpen && (
-              <div className="pl-4 pb-2 border-l-2 border-gray-700 ml-2 space-y-0.5">
-                <Link
-                  href={`/${language}/results?mode=rent&rentalType=short-term`}
-                  onClick={onClose}
-                  className="block px-3 py-2.5 text-sm text-gray-400 hover:text-white rounded-lg active:bg-gray-800/50"
-                >
-                  {t('navigation.rentShortTerm')}
-                </Link>
-                <Link
-                  href={`/${language}/results?mode=rent&rentalType=long-term`}
-                  onClick={onClose}
-                  className="block px-3 py-2.5 text-sm text-gray-400 hover:text-white rounded-lg active:bg-gray-800/50"
-                >
-                  {t('navigation.rentLongTerm')}
-                </Link>
-              </div>
-            )}
-          </div>
-
-          {navigationItems.map((item) => {
-            const href = `/${language}${item.href}`
-            const isActive = pathname === href || pathname?.startsWith(`/${language}${item.href}`)
+          {[...NAV_ITEMS, { key: 'about' as const, labelKey: 'navigation.about' }].map((item) => {
+            const href = localePath(language, item.key)
+            const isActive = pathname === href || (pathname?.startsWith(`${href}/`) ?? false)
             return (
               <Link
-                key={item.id}
+                key={item.key}
                 href={href}
                 onClick={onClose}
                 className={clsx(
@@ -127,13 +84,13 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
           >
             <Image
               src="/incanto-logo.png"
-              alt="Incanto Hotel"
+              alt="L'Incanto Apartments"
               width={22}
               height={22}
               className="rounded-sm object-contain"
               unoptimized
             />
-            Incanto Hotel
+            L&apos;Incanto Apartments
           </a>
 
           <div className="pt-4 mt-2 border-t border-gray-800">

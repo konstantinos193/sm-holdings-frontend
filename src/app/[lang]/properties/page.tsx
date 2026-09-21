@@ -3,38 +3,46 @@ import { Suspense } from 'react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { PropertiesContent } from '@/components/properties/PropertiesContent'
-import { getSEOKeywords } from '@/lib/seo-keywords'
 import { RealEstateListingSchema } from '@/components/seo/RealEstateListingSchema'
+import { OrganizationSchema } from '@/components/seo/OrganizationSchema'
 import { serverFetch } from '@/lib/api/server'
-
-const BASE_URL = 'https://smholdings.gr'
+import { pageMetadata } from '@/lib/seo/metadata'
+import { toLocale } from '@/lib/seo/routes'
 
 type Props = {
   params: Promise<{ lang: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+const C = {
+  en: {
+    title: 'Properties for Rent in Preveza | SM Holdings',
+    description: 'Properties currently available for rent from the portfolio SM Holdings manages in the Preveza area. Real, available listings only — no placeholder inventory.',
+  },
+  el: {
+    title: 'Ακίνητα προς Ενοικίαση στην Πρέβεζα | SM Holdings',
+    description: 'Ακίνητα διαθέσιμα προς ενοικίαση από το χαρτοφυλάκιο που διαχειρίζεται η SM Holdings στην περιοχή της Πρέβεζας. Μόνο πραγματικές, διαθέσιμες καταχωρήσεις.',
+  },
+}
+
+// Query-parameter states (filters, sort, pagination) are UX, not landing
+// pages: they canonicalise to the clean listing and are kept out of the index
+// so faceted navigation cannot multiply thin URLs.
+const FACET_KEYS = ['location', 'type', 'intention', 'rentalType', 'guests', 'checkIn', 'checkOut', 'minPrice', 'maxPrice', 'amenities', 'page', 'limit', 'sortBy', 'sortOrder', 'sort', 'mode']
+
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { lang } = await params
-  const isEl = lang === 'el'
-  const title = isEl ? 'Ενοικίαση Ακινήτων Ελλάδα | Διαμερίσματα & Βίλες | SMH Real Estate' : 'Property Rentals Greece | Apartments & Villas | SMH Real Estate'
-  const description = isEl
-    ? 'Εξερευνήστε 100+ ακίνητα για ενοικίαση σε όλη την Ελλάδα. Διαμερίσματα, σπίτια, βίλες. Μακροχρόνιες & βραχυχρόνιες μισθώσεις. Κάντε κράτηση online σήμερα!'
-    : 'Explore 100+ properties for rent across Greece. Apartments, houses, villas. Long-term & short-term rentals. Online booking available. Find your perfect home today!'
-  return {
-    title,
-    description,
-    keywords: getSEOKeywords('properties', isEl ? 'el' : 'en'),
-    alternates: { canonical: `${BASE_URL}/${lang}/properties`, languages: { 'el-GR': `${BASE_URL}/el/properties`, 'en-US': `${BASE_URL}/en/properties`, 'x-default': `${BASE_URL}/en/properties` } },
-    openGraph: { title, description, url: `${BASE_URL}/${lang}/properties`, type: 'website', locale: isEl ? 'el_GR' : 'en_US', images: [{ url: `${BASE_URL}/og-image.png`, width: 1200, height: 630, alt: title }] },
-    twitter: { card: 'summary_large_image', title, description, images: [`${BASE_URL}/og-image.png`] },
-  }
+  const search = await searchParams
+  const locale = toLocale(lang)
+  const base = pageMetadata({ lang, key: 'properties', title: C[locale].title, description: C[locale].description })
+  const hasFacet = FACET_KEYS.some((k) => typeof search[k] === 'string' && search[k] !== '')
+  return hasFacet ? { ...base, robots: { index: false, follow: true } } : base
 }
 
 export default async function PropertiesPage({ params, searchParams }: Props) {
   const { lang } = await params
   const search = await searchParams
-  const isEl = lang === 'el'
+  const locale = toLocale(lang)
 
   // Fetch properties for schema
   let propertiesForSchema: Array<{
@@ -52,9 +60,7 @@ export default async function PropertiesPage({ params, searchParams }: Props) {
   }> = []
 
   try {
-    const response = await serverFetch<{ success: boolean; data: { properties: any[] } }>(
-      '/properties?limit=20&page=1'
-    )
+    const response = await serverFetch<{ success: boolean; data: { properties: any[] } }>('/properties?limit=20&page=1')
     if (response.success) {
       propertiesForSchema = response.data.properties.map((p: any) => ({
         id: p.id,
@@ -66,8 +72,8 @@ export default async function PropertiesPage({ params, searchParams }: Props) {
         bedrooms: p.bedrooms,
         bathrooms: p.bathrooms,
         area: p.area,
-        image: p.images[0],
-        description: isEl ? p.descriptionGr : p.descriptionEn,
+        image: p.images?.[0],
+        description: locale === 'el' ? p.descriptionGr : p.descriptionEn,
       }))
     }
   } catch {
@@ -76,11 +82,12 @@ export default async function PropertiesPage({ params, searchParams }: Props) {
 
   return (
     <>
-      <RealEstateListingSchema properties={propertiesForSchema} lang={isEl ? 'el' : 'en'} />
+      <OrganizationSchema lang={locale} />
+      <RealEstateListingSchema properties={propertiesForSchema} lang={locale} />
       <Header />
       <main className="flex-1 min-h-screen bg-gray-50">
         <Suspense fallback={<PropertiesLoadingSkeleton />}>
-          <PropertiesContent lang={lang} searchParams={search} />
+          <PropertiesContent lang={locale} searchParams={search} />
         </Suspense>
       </main>
       <Footer />
@@ -109,4 +116,3 @@ function PropertiesLoadingSkeleton() {
     </div>
   )
 }
-

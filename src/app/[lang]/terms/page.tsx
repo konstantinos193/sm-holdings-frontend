@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { OrganizationSchema } from '@/components/seo/OrganizationSchema'
 import { getDictionary } from '@/lib/i18n/dictionaries'
-import { getSEOKeywords } from '@/lib/seo-keywords'
-
-const BASE_URL = 'https://smholdings.gr'
+import { pageMetadata } from '@/lib/seo/metadata'
+import { toLocale } from '@/lib/seo/routes'
 
 type Props = {
   params: Promise<{ lang: string }>
@@ -12,19 +12,15 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params
-  const isEl = lang === 'el' || lang === 'gr'
-  const title = isEl ? 'Όροι Χρήσης | SMH Real Estate' : 'Terms of Service | SMH Real Estate'
-  const description = isEl
-    ? 'Διαβάστε τους όρους χρήσης της πλατφόρμας SMH Real Estate. Πληροφορίες για τα δικαιώματα και τις υποχρεώσεις των χρηστών.'
-    : 'Read the SMH Real Estate terms of service. Information on user rights, obligations, and platform usage conditions.'
-  return {
-    title,
-    description,
-    keywords: getSEOKeywords('terms', isEl ? 'el' : 'en'),
-    alternates: { canonical: `${BASE_URL}/${lang}/terms`, languages: { 'el-GR': `${BASE_URL}/el/terms`, 'en-US': `${BASE_URL}/en/terms`, 'x-default': `${BASE_URL}/en/terms` } },
-    openGraph: { title, description, url: `${BASE_URL}/${lang}/terms`, type: 'website', locale: isEl ? 'el_GR' : 'en_US' },
-    robots: { index: true, follow: false },
-  }
+  const isEl = toLocale(lang) === 'el'
+  return pageMetadata({
+    lang,
+    key: 'terms',
+    title: isEl ? 'Όροι Χρήσης | SM Holdings' : 'Terms of Service | SM Holdings',
+    description: isEl
+      ? 'Οι όροι χρήσης της ιστοσελίδας της SM Holdings (S. M. HOLDINGS Ε.Ε.): δικαιώματα και υποχρεώσεις χρηστών, κρατήσεις και αιτήματα.'
+      : 'Terms of service for the SM Holdings (S. M. HOLDINGS Ε.Ε.) website: user rights and obligations, bookings and enquiries.',
+  })
 }
 
 export default async function TermsPage({ params }: Props) {
@@ -34,6 +30,7 @@ export default async function TermsPage({ params }: Props) {
   
   return (
     <>
+      <OrganizationSchema lang={normalizedLang} />
       <Header />
       <main className="flex-1 min-h-screen bg-white">
         {/* Hero Section */}
@@ -165,7 +162,7 @@ export default async function TermsPage({ params }: Props) {
                     {dict.terms?.section9?.title || '9. Contact Information'}
                   </h2>
                   <p>
-                    {dict.terms?.section9?.content || 'If you have any questions about these Terms of Service, please contact us at legal@example.com or through our contact page.'}
+                    {dict.terms?.section9?.content || 'If you have any questions about these Terms of Service, please contact us at smholdings.gr@gmail.com or through our contact page.'}
                   </p>
                 </div>
               </div>

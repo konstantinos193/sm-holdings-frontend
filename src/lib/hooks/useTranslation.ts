@@ -1,65 +1,43 @@
 'use client'
 
 import { useLanguage } from '@/lib/contexts/LanguageContext'
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo } from 'react'
+import en from '@/messages/en.json'
+import el from '@/messages/el.json'
 
-type Messages = typeof import('@/messages/en.json')
+type Messages = typeof en
 
-let messagesCache: { en?: Messages; el?: Messages } = {}
+// Both dictionaries are bundled statically so that `t()` resolves synchronously
+// during server rendering. The previous async `useEffect` loader returned the raw
+// key on the server (and on the first client paint), which leaked strings like
+// `footer.links.aboutUs` / `servicesOverview.title` into the HTML Googlebot indexes.
+const messagesByLang: Record<'en' | 'el', Messages> = { en, el: el as unknown as Messages }
 
-// Preload messages synchronously if possible
-const loadMessages = async (lang: 'en' | 'el'): Promise<Messages> => {
-  if (messagesCache[lang]) {
-    return messagesCache[lang]!
-  }
-  
-  const module = await import(`@/messages/${lang}.json`)
-  messagesCache[lang] = module.default
-  return module.default
+// Hardcoded fallbacks for critical translations
+const fallbacks: Record<string, Record<string, string>> = {
+  'features.subtitle': {
+    en: 'Reliable services with modern technology',
+    el: 'Αξιόπιστες υπηρεσίες με σύγχρονη τεχνολογία',
+  },
+  'features.title': {
+    en: 'Why Choose Us?',
+    el: 'Γιατί να μας επιλέξετε;',
+  },
 }
 
 export const useTranslation = () => {
   const { language } = useLanguage()
-  const [messages, setMessages] = useState<Messages | null>(null)
-
-  useEffect(() => {
-    const load = async () => {
-      // Always reload messages when language changes to ensure correct language
-      const loaded = await loadMessages(language as 'en' | 'el')
-      setMessages(loaded)
-    }
-    load()
-  }, [language])
 
   const t = useMemo(() => {
+    const messages = messagesByLang[language] ?? messagesByLang.en
+
     return (key: string, params?: Record<string, string | number>) => {
-      // Hardcoded fallbacks for critical translations
-      const fallbacks: Record<string, Record<string, string>> = {
-        'features.subtitle': {
-          en: 'Reliable services with modern technology',
-          el: 'Αξιόπιστες υπηρεσίες με σύγχρονη τεχνολογία'
-        },
-        'features.title': {
-          en: 'Why Choose Us?',
-          el: 'Γιατί να μας επιλέξετε;'
-        }
-      }
-
-      if (!messages) {
-        // Use fallback if available
-        if (fallbacks[key] && fallbacks[key][language]) {
-          return fallbacks[key][language]
-        }
-        return key
-      }
-
       const keys = key.split('.')
       let value: any = messages
 
       for (const k of keys) {
         value = value?.[k]
         if (value === undefined) {
-          // Use fallback if available
           if (fallbacks[key] && fallbacks[key][language]) {
             return fallbacks[key][language]
           }
@@ -78,8 +56,7 @@ export const useTranslation = () => {
 
       return value || (fallbacks[key] && fallbacks[key][language]) || key
     }
-  }, [messages, language])
+  }, [language])
 
   return t
 }
-

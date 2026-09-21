@@ -1,5 +1,7 @@
 type PropertySchemaProps = {
   id: string
+  /** Canonical public URL of the property page (slugged) */
+  pageUrl?: string
   title: string
   description: string
   address: string
@@ -18,6 +20,7 @@ type PropertySchemaProps = {
 
 export function PropertySchema({
   id,
+  pageUrl,
   title,
   description,
   address,
@@ -33,7 +36,7 @@ export function PropertySchema({
   rating,
   reviewCount,
 }: PropertySchemaProps) {
-  const url = `https://smholdings.gr/${lang}/properties/${id}`
+  const url = pageUrl ?? `https://smholdings.gr/${lang}/properties/${id}`
 
   const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',

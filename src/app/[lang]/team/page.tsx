@@ -1,161 +1,85 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { getDictionary } from '@/lib/i18n/dictionaries'
-import { getSEOKeywords } from '@/lib/seo-keywords'
+import { Breadcrumbs } from '@/components/content/Breadcrumbs'
+import { OrganizationSchema } from '@/components/seo/OrganizationSchema'
+import { team } from '@/content/company'
+import { COMMON } from '@/content/types'
+import { BUSINESS } from '@/lib/seo/business'
+import { pageMetadata } from '@/lib/seo/metadata'
+import { absoluteUrl, localePath, toLocale } from '@/lib/seo/routes'
 
-const BASE_URL = 'https://smholdings.gr'
-
-type Props = {
-  params: Promise<{ lang: string }>
-}
+type Props = { params: Promise<{ lang: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params
-  const isEl = lang === 'el' || lang === 'gr'
-  const title = isEl ? 'Η Ομάδα μας | SMH Real Estate' : 'Our Team | SMH Real Estate'
-  const description = isEl
-    ? 'Γνωρίστε την ομάδα της SMH Real Estate — έμπειροι επαγγελματίες ακινήτων αφοσιωμένοι στην εξυπηρέτησή σας σε όλη την Ελλάδα.'
-    : 'Meet the SMH Real Estate team — experienced real estate professionals dedicated to providing outstanding service across Greece.'
-  return {
-    title,
-    description,
-    keywords: getSEOKeywords('team', isEl ? 'el' : 'en'),
-    alternates: { canonical: `${BASE_URL}/${lang}/team`, languages: { 'el-GR': `${BASE_URL}/el/team`, 'en-US': `${BASE_URL}/en/team`, 'x-default': `${BASE_URL}/en/team` } },
-    openGraph: { title, description, url: `${BASE_URL}/${lang}/team`, type: 'website', locale: isEl ? 'el_GR' : 'en_US', images: [{ url: `${BASE_URL}/og-image.png`, width: 1200, height: 630, alt: title }] },
-    twitter: { card: 'summary_large_image', title, description },
-  }
+  const c = team[toLocale(lang)]
+  return pageMetadata({ lang, key: 'team', title: c.metaTitle, description: c.metaDescription })
 }
 
 export default async function TeamPage({ params }: Props) {
   const { lang } = await params
-  const normalizedLang = lang === 'el' || lang === 'gr' ? 'el' : 'en'
-  const dict = await getDictionary(normalizedLang)
-  
-  // Team members data - in a real app, this would come from a database
-  const teamMembers = [
-    {
-      id: 1,
-      name: dict.team?.members?.member1?.name || 'John Smith',
-      role: dict.team?.members?.member1?.role || 'Founder & CEO',
-      bio: dict.team?.members?.member1?.bio || 'With over 15 years of experience in real estate, John leads our team with vision and dedication.',
-      email: 'john.smith@example.com',
-      phone: '+1 XXX XXX XXXX',
-      expertise: [dict.team?.expertise?.realEstate || 'Real Estate', dict.team?.expertise?.investment || 'Investment Consulting']
-    },
-    {
-      id: 2,
-      name: dict.team?.members?.member2?.name || 'Jane Doe',
-      role: dict.team?.members?.member2?.role || 'Property Management Director',
-      bio: dict.team?.members?.member2?.bio || 'Jane specializes in property management and ensures our properties are maintained to the highest standards.',
-      email: 'jane.doe@example.com',
-      phone: '+1 XXX XXX XXXX',
-      expertise: [dict.team?.expertise?.propertyManagement || 'Property Management', dict.team?.expertise?.maintenance || 'Maintenance']
-    },
-    {
-      id: 3,
-      name: dict.team?.members?.member3?.name || 'Mike Johnson',
-      role: dict.team?.members?.member3?.role || 'Sales & Marketing Manager',
-      bio: dict.team?.members?.member3?.bio || 'Mike brings extensive market knowledge and helps clients find their perfect property match.',
-      email: 'mike.johnson@example.com',
-      phone: '+1 XXX XXX XXXX',
-      expertise: [dict.team?.expertise?.sales || 'Sales', dict.team?.expertise?.marketing || 'Marketing']
-    },
-    {
-      id: 4,
-      name: dict.team?.members?.member4?.name || 'Sarah Williams',
-      role: dict.team?.members?.member4?.role || 'Customer Relations Specialist',
-      bio: dict.team?.members?.member4?.bio || 'Sarah ensures exceptional customer service and maintains strong relationships with our clients.',
-      email: 'sarah.williams@example.com',
-      phone: '+1 XXX XXX XXXX',
-      expertise: [dict.team?.expertise?.customerService || 'Customer Service', dict.team?.expertise?.relations || 'Client Relations']
-    }
-  ]
-  
+  const locale = toLocale(lang)
+  const c = team[locale]
+  const pageUrl = absoluteUrl(localePath(locale, 'team'))
+
+  // Person entities for the real founders only (from the ΓΕΜΗ registry).
+  const personSchema = BUSINESS.founders.map((f, i) => ({
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': `${pageUrl}#person-${i + 1}`,
+    name: locale === 'el' ? f.nameEl : f.name,
+    alternateName: locale === 'el' ? f.name : f.nameEl,
+    jobTitle: locale === 'el' ? f.roleEl : f.role,
+    worksFor: { '@id': BUSINESS.id },
+    ...(i === 0 ? { affiliation: { '@id': BUSINESS.id } } : {}),
+  }))
+
   return (
     <>
+      <OrganizationSchema lang={locale} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }} />
       <Header />
       <main className="flex-1 min-h-screen bg-white">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-gray-50 to-gray-100 py-16 lg:py-24">
+        <section className="bg-gradient-to-br from-gray-50 to-gray-100 py-12 lg:py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto">
-              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                {dict.team?.title || 'Our Team'}
-              </h1>
-              <p className="text-xl text-gray-600 leading-relaxed">
-                {dict.team?.subtitle || 'Meet the experienced professionals dedicated to helping you achieve your real estate goals.'}
-              </p>
+            <div className="mb-6">
+              <Breadcrumbs items={[{ name: COMMON.home[locale], href: localePath(locale, 'home') }, { name: c.breadcrumb, href: localePath(locale, 'team') }]} />
+            </div>
+            <div className="max-w-3xl">
+              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">{c.h1}</h1>
+              <p className="text-lg lg:text-xl text-gray-600 leading-relaxed">{c.intro}</p>
             </div>
           </div>
         </section>
 
-        {/* Team Members Grid */}
-        <section className="py-16 lg:py-24">
+        <section className="py-14 lg:py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {teamMembers.map((member) => (
-                <div key={member.id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                  <div className="bg-gray-200 aspect-square flex items-center justify-center">
-                    <svg className="w-24 h-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-1">
-                      {member.name}
-                    </h3>
-                    <p className="text-accent-blue font-medium mb-4">
-                      {member.role}
-                    </p>
-                    <p className="text-gray-600 text-sm mb-4 leading-relaxed">
-                      {member.bio}
-                    </p>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {member.expertise.map((exp, idx) => (
-                        <span key={idx} className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-                          {exp}
-                        </span>
-                      ))}
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {c.members.map((m) => (
+                <li key={m.name} className="bg-white border border-gray-200 rounded-lg p-8">
+                  <div className="flex items-start gap-5">
+                    <div className="w-16 h-16 rounded-full bg-gray-900 text-white flex items-center justify-center text-xl font-semibold flex-shrink-0" aria-hidden>
+                      {m.name.split(' ').map((n) => n[0]).join('').slice(0, 2)}
                     </div>
-                    <div className="space-y-2 pt-4 border-t border-gray-200">
-                      <a href={`mailto:${member.email}`} className="flex items-center gap-2 text-sm text-gray-600 hover:text-accent-blue transition-colors">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        {member.email}
-                      </a>
-                      <a href={`tel:${member.phone}`} className="flex items-center gap-2 text-sm text-gray-600 hover:text-accent-blue transition-colors">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                        </svg>
-                        {member.phone}
-                      </a>
+                    <div>
+                      <h2 className="text-xl font-semibold text-gray-900">{m.name}</h2>
+                      <p className="text-accent-blue font-medium mb-3">{m.role}</p>
+                      <p className="text-gray-600 leading-relaxed">{m.bio}</p>
                     </div>
                   </div>
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         </section>
 
-        {/* Join Our Team CTA */}
-        <section className="py-16 lg:py-24 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-accent-blue rounded-lg p-8 lg:p-12 text-center text-white">
-              <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-                {dict.team?.cta?.title || 'Join Our Team'}
-              </h2>
-              <p className="text-xl mb-8 text-blue-100 max-w-2xl mx-auto">
-                {dict.team?.cta?.description || 'We are always looking for talented individuals to join our growing team. Explore career opportunities with us.'}
-              </p>
-              <a
-                href={`/${lang}/careers`}
-                className="inline-block px-8 py-3 bg-white text-accent-blue font-semibold rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                {dict.team?.cta?.button || 'View Careers'}
-              </a>
-            </div>
+        <section className="py-14 lg:py-20 bg-gray-50">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">{c.network.title}</h2>
+            <p className="text-gray-600 leading-relaxed mb-8">{c.network.text}</p>
+            <Link href={localePath(locale, 'contact')} className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-gray-900 text-white font-semibold hover:bg-gray-800 transition-colors">{c.contact}</Link>
           </div>
         </section>
       </main>

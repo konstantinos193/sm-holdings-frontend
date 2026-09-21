@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { OrganizationSchema } from '@/components/seo/OrganizationSchema'
 import { getDictionary } from '@/lib/i18n/dictionaries'
-import { getSEOKeywords } from '@/lib/seo-keywords'
-
-const BASE_URL = 'https://smholdings.gr'
+import { pageMetadata } from '@/lib/seo/metadata'
+import { toLocale } from '@/lib/seo/routes'
 
 type Props = {
   params: Promise<{ lang: string }>
@@ -12,19 +12,15 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params
-  const isEl = lang === 'el' || lang === 'gr'
-  const title = isEl ? 'Πολιτική Απορρήτου | SMH Real Estate' : 'Privacy Policy | SMH Real Estate'
-  const description = isEl
-    ? 'Διαβάστε την πολιτική απορρήτου της SMH Real Estate. Πληροφορίες για τη συλλογή, χρήση και προστασία των προσωπικών σας δεδομένων.'
-    : 'Read the SMH Real Estate privacy policy. Information on how we collect, use, and protect your personal data in accordance with GDPR.'
-  return {
-    title,
-    description,
-    keywords: getSEOKeywords('privacy', isEl ? 'el' : 'en'),
-    alternates: { canonical: `${BASE_URL}/${lang}/privacy`, languages: { 'el-GR': `${BASE_URL}/el/privacy`, 'en-US': `${BASE_URL}/en/privacy`, 'x-default': `${BASE_URL}/en/privacy` } },
-    openGraph: { title, description, url: `${BASE_URL}/${lang}/privacy`, type: 'website', locale: isEl ? 'el_GR' : 'en_US' },
-    robots: { index: true, follow: false },
-  }
+  const isEl = toLocale(lang) === 'el'
+  return pageMetadata({
+    lang,
+    key: 'privacy',
+    title: isEl ? 'Πολιτική Απορρήτου | SM Holdings' : 'Privacy Policy | SM Holdings',
+    description: isEl
+      ? 'Η πολιτική απορρήτου της SM Holdings (S. M. HOLDINGS Ε.Ε.): ποια προσωπικά δεδομένα συλλέγουμε, πώς τα χρησιμοποιούμε και πώς τα προστατεύουμε σύμφωνα με τον GDPR.'
+      : 'The SM Holdings (S. M. HOLDINGS Ε.Ε.) privacy policy: what personal data we collect, how we use it and how we protect it under the GDPR.',
+  })
 }
 
 export default async function PrivacyPage({ params }: Props) {
@@ -34,6 +30,7 @@ export default async function PrivacyPage({ params }: Props) {
   
   return (
     <>
+      <OrganizationSchema lang={normalizedLang} />
       <Header />
       <main className="flex-1 min-h-screen bg-white">
         {/* Hero Section */}
@@ -206,7 +203,7 @@ export default async function PrivacyPage({ params }: Props) {
                     {dict.privacy?.section10?.title || '10. Contact Us'}
                   </h2>
                   <p>
-                    {dict.privacy?.section10?.content || 'If you have any questions about this Privacy Policy, please contact us at privacy@example.com or through our contact page.'}
+                    {dict.privacy?.section10?.content || 'If you have any questions about this Privacy Policy, please contact us at smholdings.gr@gmail.com or through our contact page.'}
                   </p>
                 </div>
               </div>

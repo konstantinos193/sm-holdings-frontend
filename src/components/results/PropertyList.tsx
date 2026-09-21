@@ -4,6 +4,8 @@ import { memo } from 'react'
 import { Property } from '@/types/property'
 import { PropertyCard } from './PropertyCard'
 import { useTranslation } from '@/lib/hooks/useTranslation'
+import Link from 'next/link'
+import { propertyPath } from '@/lib/seo/routes'
 
 interface PropertyListProps {
   properties: Property[]
@@ -40,7 +42,9 @@ const PropertyListComponent = ({ properties, lang = 'en' }: PropertyListProps) =
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {properties.map((property) => (
-        <PropertyCard key={property.id} property={property} lang={lang} />
+        <Link key={property.id} href={propertyPath(lang, property)} className="block rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-blue">
+          <PropertyCard property={property} lang={lang} />
+        </Link>
       ))}
     </div>
   )

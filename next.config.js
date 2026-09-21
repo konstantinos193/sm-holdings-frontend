@@ -1,9 +1,33 @@
 const path = require('path');
+const { routes, dynamicRoutes } = require('./routes.config.js');
+
+// Greek public URLs use Greek slugs (see routes.config.js). They are served by
+// the same route files as the English pages through internal rewrites.
+function localizedRewrites() {
+  const list = [];
+  for (const { en, el } of Object.values(routes)) {
+    if (en && el && en !== el) {
+      list.push({ source: `/el/${el}`, destination: `/el/${en}` });
+    }
+  }
+  const p = dynamicRoutes.propertyDetail;
+  if (p.en !== p.el) {
+    list.push({ source: `/el/${p.el}/:slug`, destination: `/el/${p.en}/:slug` });
+  }
+  return list;
+}
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async rewrites() {
+    return { beforeFiles: localizedRewrites() };
+  },
   async redirects() {
     return [
+      // Legacy L'Incanto landing page -> hospitality/relationship page.
+      // (Guest bookings belong on lincanto.gr; this site covers the owner side.)
+      { source: '/en/incanto', destination: `/en/${routes.hospitality.en}`, permanent: true },
+      { source: '/el/incanto', destination: `/el/${routes.hospitality.el}`, permanent: true },
       // Force HTTPS redirects - more comprehensive
       { 
         source: '/((?!_next|api).*)', 

@@ -1,21 +1,30 @@
-export function WebsiteSchema() {
+import { BASE_URL, BUSINESS } from '@/lib/seo/business'
+
+type Props = {
+  lang?: 'en' | 'el'
+}
+
+export function WebsiteSchema({ lang = 'en' }: Props) {
+  const isEl = lang === 'el'
+
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    '@id': 'https://smholdings.gr/#website',
-    url: 'https://smholdings.gr',
-    name: 'SMH Real Estate',
-    description:
-      'Trusted real estate platform in Greece. Long-term & short-term rentals, property management, and investment consulting.',
-    publisher: {
-      '@id': 'https://smholdings.gr/#organization',
-    },
-    inLanguage: ['en-US', 'el-GR'],
+    '@id': BUSINESS.websiteId,
+    url: BASE_URL,
+    name: BUSINESS.name,
+    alternateName: BUSINESS.alternateNames,
+    description: isEl
+      ? 'Διαχείριση ακινήτων, βραχυχρόνιες & μακροχρόνιες μισθώσεις και επενδυτική συμβουλευτική στην Ελλάδα.'
+      : 'Property management, short-term & long-term rentals and investment consulting in Greece.',
+    publisher: { '@id': BUSINESS.id },
+    inLanguage: isEl ? 'el-GR' : 'en-US',
     potentialAction: {
       '@type': 'SearchAction',
+      // The results page reads the `location` query parameter.
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://smholdings.gr/en/results?q={search_term_string}',
+        urlTemplate: `${BASE_URL}/${lang}/results?location={search_term_string}`,
       },
       'query-input': 'required name=search_term_string',
     },

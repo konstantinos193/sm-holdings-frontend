@@ -1,178 +1,109 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { getSEOKeywords } from '@/lib/seo-keywords'
-import Link from 'next/link'
+import { Breadcrumbs } from '@/components/content/Breadcrumbs'
+import { CtaButtons } from '@/components/content/Cta'
+import { OrganizationSchema } from '@/components/seo/OrganizationSchema'
+import { COMMON } from '@/content/types'
+import { countBy, fetchAllProperties } from '@/lib/inventory'
+import { pageMetadata } from '@/lib/seo/metadata'
+import { localePath, toLocale } from '@/lib/seo/routes'
 
-const BASE_URL = 'https://smholdings.gr'
+type Props = { params: Promise<{ lang: string }> }
 
-type Props = {
-  params: Promise<{ lang: string }>
+const C = {
+  en: {
+    title: 'Where SM Holdings Operates | Locations in Preveza, Greece',
+    description: 'The areas SM Holdings serves and where its listed properties are: Preveza town, the Ionian coast at Chroneika, Kalamitsi and Monolithi, and Filippiada. Real listing counts from the current portfolio.',
+    h1: 'Locations',
+    intro: 'SM Holdings works in the Preveza area of Epirus. Below are the places with properties currently listed — counts come from the live portfolio, so a location appears only when something is actually available there — and the area page that explains how we operate locally.',
+    listed: 'Properties currently listed',
+    area: 'Service area',
+    none: 'No properties are listed at the moment.',
+    prevezaCard: { title: 'Property management in Preveza', text: 'Areas served, how the holiday-rental season works, the airport and tourism context, and the building we operate at Chroneika.' },
+    other: { title: 'Property elsewhere in Greece?', text: 'We take on owners outside Preveza case by case. Tell us where the property is and we will say honestly whether we can cover it.' },
+    unit: (n: number) => (n === 1 ? '1 property' : `${n} properties`),
+  },
+  el: {
+    title: 'Πού Δραστηριοποιείται η SM Holdings | Περιοχές στην Πρέβεζα',
+    description: 'Οι περιοχές που εξυπηρετεί η SM Holdings και πού βρίσκονται τα καταχωρημένα ακίνητά της: πόλη της Πρέβεζας, η ακτή του Ιονίου στα Χρονέικα, Καλαμίτσι και Μονολίθι, και η Φιλιππιάδα. Πραγματικός αριθμός καταχωρήσεων από το τρέχον χαρτοφυλάκιο.',
+    h1: 'Περιοχές',
+    intro: 'Η SM Holdings δραστηριοποιείται στην περιοχή της Πρέβεζας στην Ήπειρο. Παρακάτω είναι τα μέρη με ακίνητα καταχωρημένα αυτή τη στιγμή — οι αριθμοί προέρχονται από το ζωντανό χαρτοφυλάκιο, οπότε μια περιοχή εμφανίζεται μόνο όταν υπάρχει πράγματι κάτι διαθέσιμο εκεί — και η σελίδα περιοχής που εξηγεί πώς λειτουργούμε τοπικά.',
+    listed: 'Ακίνητα καταχωρημένα τώρα',
+    area: 'Περιοχή εξυπηρέτησης',
+    none: 'Δεν υπάρχουν καταχωρημένα ακίνητα αυτή τη στιγμή.',
+    prevezaCard: { title: 'Διαχείριση ακινήτων στην Πρέβεζα', text: 'Περιοχές που εξυπηρετούμε, πώς λειτουργεί η σεζόν διακοπών, το αεροδρόμιο και ο τουρισμός, και το κτίριο που λειτουργούμε στα Χρονέικα.' },
+    other: { title: 'Ακίνητο αλλού στην Ελλάδα;', text: 'Αναλαμβάνουμε ιδιοκτήτες εκτός Πρέβεζας κατά περίπτωση. Πείτε μας πού είναι το ακίνητο και θα σας πούμε ειλικρινά αν μπορούμε να το καλύψουμε.' },
+    unit: (n: number) => (n === 1 ? '1 ακίνητο' : `${n} ακίνητα`),
+  },
 }
-
-const locations = [
-  { 
-    name: 'Αθήνα', 
-    nameEn: 'Athens', 
-    slug: 'athens',
-    description: 'Η καρδιά της Ελλάδας - σύγχρονα διαμερίσματα και ιστορικές κατοικίες',
-    descriptionEn: 'The heart of Greece - modern apartments and historic homes',
-    propertyCount: 45
-  },
-  { 
-    name: 'Θεσσαλονίκη', 
-    nameEn: 'Thessaloniki', 
-    slug: 'thessaloniki',
-    description: 'Η πρωτεύουσα της Βόρειας Ελλάδας - ακίνητα κοντά στη θάλασσα',
-    descriptionEn: 'Capital of Northern Greece - properties near the sea',
-    propertyCount: 28
-  },
-  { 
-    name: 'Μύκονος', 
-    nameEn: 'Mykonos', 
-    slug: 'mykonos',
-    description: 'Απολαυστικές βίλες και πολυτελείς κατοικίες για διακοπές',
-    descriptionEn: 'Luxurious villas and premium holiday homes',
-    propertyCount: 15
-  },
-  { 
-    name: 'Σαντορίνη', 
-    nameEn: 'Santorini', 
-    slug: 'santorini',
-    description: 'Μοναδικές κατοικίες με θέα το ηφαίστειο και την Καλντέρα',
-    descriptionEn: 'Unique homes with volcano and Caldera views',
-    propertyCount: 12
-  },
-  { 
-    name: 'Κρήτη', 
-    nameEn: 'Crete', 
-    slug: 'crete',
-    description: 'Μεγάλο νησί με ποικιλία ακινήτων από παραθαλάσσια μέχρι ορεινά',
-    descriptionEn: 'Large island with diverse properties from seaside to mountain',
-    propertyCount: 32
-  },
-  { 
-    name: 'Κέρκυρα', 
-    nameEn: 'Corfu', 
-    slug: 'corfu',
-    description: 'Πράσινο νησί με βενετσιάνικη αρχιτεκτονική και όμορφες παραλίες',
-    descriptionEn: 'Green island with Venetian architecture and beautiful beaches',
-    propertyCount: 18
-  }
-]
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params
-  const isEl = lang === 'el'
-  
-  const title = isEl 
-    ? 'Τοποθεσίες Ακινήτων Ελλάδα | Αθήνα, Θεσσαλονίκη, Μύκονος | SMH Real Estate'
-    : 'Property Locations Greece | Athens, Thessaloniki, Mykonos | SMH Real Estate'
-    
-  const description = isEl
-    ? 'Βρείτε ακίνητα στις καλύτερες τοποθεσίες της Ελλάδας. Αθήνα, Θεσσαλονίκη, Μύκονος, Σαντορίνη, Κρήτη, Κέρκυρα. Διαμερίσματα, βίλες, σπίτια για ενοικίαση.'
-    : 'Find properties in the best locations in Greece. Athens, Thessaloniki, Mykonos, Santorini, Crete, Corfu. Apartments, villas, houses for rent.'
-
-  return {
-    title,
-    description,
-    keywords: [
-      ...getSEOKeywords('home', isEl ? 'el' : 'en'),
-      'ακίνητα αθήνα', 'properties athens', 'ενοικίαση θεσσαλονίκη', 'rental thessaloniki',
-      'βίλες μύκονος', 'villas mykonos', 'κατοικίες σαντορίνη', 'homes santorini'
-    ],
-    alternates: { 
-      canonical: `${BASE_URL}/${lang}/locations`, 
-      languages: { 
-        'el-GR': `${BASE_URL}/el/locations`, 
-        'en-US': `${BASE_URL}/en/locations`, 
-        'x-default': `${BASE_URL}/en/locations` 
-      } 
-    },
-    openGraph: { 
-      title, 
-      description, 
-      url: `${BASE_URL}/${lang}/locations`, 
-      type: 'website', 
-      locale: isEl ? 'el_GR' : 'en_US', 
-      images: [{ url: `${BASE_URL}/og-image.png`, width: 1200, height: 630, alt: title }] 
-    },
-    twitter: { card: 'summary_large_image', title, description, images: [`${BASE_URL}/og-image.png`] },
-  }
+  const c = C[toLocale(lang)]
+  return pageMetadata({ lang, key: 'locations', title: c.title, description: c.description })
 }
 
 export default async function LocationsPage({ params }: Props) {
   const { lang } = await params
-  const isEl = lang === 'el'
+  const locale = toLocale(lang)
+  const c = C[locale]
+  const properties = await fetchAllProperties()
+  const cities = countBy(properties, (p) => p.city)
 
   return (
     <>
+      <OrganizationSchema lang={locale} />
       <Header />
-      <main className="flex-1 min-h-screen bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              {isEl ? 'Ακίνητα ανά Τοποθεσία' : 'Properties by Location'}
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              {isEl 
-                ? 'Εξερευνήστε τα καλύτερα ακίνητα στις πιο δημοφιλείς τοποθεσίες της Ελλάδας'
-                : 'Explore the best properties in Greece\'s most popular destinations'
-              }
-            </p>
+      <main className="flex-1 min-h-screen bg-white">
+        <section className="bg-gradient-to-br from-gray-50 to-gray-100 py-12 lg:py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-6"><Breadcrumbs items={[{ name: COMMON.home[locale], href: localePath(locale, 'home') }, { name: c.h1, href: localePath(locale, 'locations') }]} /></div>
+            <div className="max-w-3xl">
+              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">{c.h1}</h1>
+              <p className="text-lg lg:text-xl text-gray-600 leading-relaxed">{c.intro}</p>
+            </div>
           </div>
+        </section>
 
-          {/* Locations Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {locations.map((location) => (
-              <Link 
-                key={location.slug}
-                href={`/${lang}/properties?location=${location.slug}`}
-                className="group block bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden"
-              >
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                      {isEl ? location.name : location.nameEn}
-                    </h3>
-                    <span className="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded">
-                      {location.propertyCount} {isEl ? 'ακίνητα' : 'properties'}
-                    </span>
-                  </div>
-                  <p className="text-gray-600 mb-4">
-                    {isEl ? location.description : location.descriptionEn}
-                  </p>
-                  <div className="flex items-center text-blue-600 font-medium">
-                    {isEl ? 'Δείτε τα ακίνητα' : 'View properties'}
-                    <svg className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          {/* CTA Section */}
-          <div className="mt-16 text-center bg-blue-50 rounded-lg p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              {isEl ? 'Δεν βρήκατε την τοποθεσία που ψάχνετε;' : 'Didn\'t find the location you\'re looking for?'}
-            </h2>
-            <p className="text-gray-600 mb-6">
-              {isEl 
-                ? 'Επικοινωνήστε μαζί μας και θα σας βοηθήσουμε να βρείτε το ιδανικό ακίνητο σε οποιαδήποτε περιοχή της Ελλάδας.'
-                : 'Contact us and we\'ll help you find the perfect property in any area of Greece.'
-              }
-            </p>
-            <Link 
-              href={`/${lang}/contact`}
-              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-            >
-              {isEl ? 'Επικοινωνία' : 'Contact Us'}
+        <section className="py-14 lg:py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-6">{c.area}</h2>
+            <Link href={localePath(locale, 'preveza')} className="block bg-white border border-gray-200 rounded-lg p-6 hover:border-gray-400 hover:shadow-sm transition-all max-w-2xl">
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">{c.prevezaCard.title}</h3>
+              <p className="text-gray-600">{c.prevezaCard.text}</p>
             </Link>
           </div>
-        </div>
+        </section>
+
+        <section className="py-14 lg:py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-6">{c.listed}</h2>
+            {cities.length === 0 ? (
+              <p className="text-gray-600">{c.none}</p>
+            ) : (
+              <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {cities.map((city) => (
+                  <li key={city.key}>
+                    <Link href={`${localePath(locale, 'properties')}?location=${encodeURIComponent(city.key)}`} className="flex items-center justify-between bg-white border border-gray-200 rounded-lg p-5 hover:border-gray-400 transition-colors">
+                      <span className="text-lg font-semibold text-gray-900">{city.key}</span>
+                      <span className="text-sm text-gray-600">{c.unit(city.count)}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </section>
+
+        <section className="py-14 lg:py-20">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">{c.other.title}</h2>
+            <p className="text-gray-600 mb-8">{c.other.text}</p>
+            <CtaButtons lang={locale} primary="owner" secondary="call" />
+          </div>
+        </section>
       </main>
       <Footer />
     </>

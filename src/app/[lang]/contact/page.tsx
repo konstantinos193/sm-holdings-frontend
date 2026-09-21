@@ -1,231 +1,117 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { getDictionary } from '@/lib/i18n/dictionaries'
-import { getSEOKeywords } from '@/lib/seo-keywords'
+import { Breadcrumbs } from '@/components/content/Breadcrumbs'
+import { ContactForm } from '@/components/contact/ContactForm'
+import { OfficeMap } from '@/components/contact/OfficeMap'
+import { OrganizationSchema } from '@/components/seo/OrganizationSchema'
+import { COMMON } from '@/content/types'
+import { BUSINESS } from '@/lib/seo/business'
+import { pageMetadata } from '@/lib/seo/metadata'
+import { localePath, toLocale } from '@/lib/seo/routes'
 
-const BASE_URL = 'https://smholdings.gr'
+type Props = { params: Promise<{ lang: string }> }
 
-type Props = {
-  params: Promise<{ lang: string }>
+const C = {
+  en: {
+    metaTitle: 'Contact SM Holdings | Preveza, Greece',
+    metaDescription: 'Contact SM Holdings in Filippiada, Preveza: address, phone, mobile, email, office hours (Tuesday & Thursday 9:00–13:00), company details and an enquiry form for owners, tenants, buyers and investors.',
+    breadcrumb: 'Contact',
+    h1: 'Contact SM Holdings',
+    intro: 'One office, one phone number, for owners, tenants, guests and investors in the Preveza area. Use the form and tell us what your enquiry is about — it goes straight to the people who will handle it.',
+    details: 'Office and company details',
+    formTitle: 'Send an enquiry',
+    map: 'Office location: A. Panagouli 2, Filippiada',
+    rows: {
+      legal: 'Legal name', address: 'Address', phone: 'Phone', mobile: 'Mobile', email: 'Email', hours: 'Office hours', area: 'Service area', response: 'How we respond', gemi: 'ΓΕΜΗ', vat: 'VAT',
+    },
+    hours: 'Tuesday & Thursday, 9:00–13:00. Visits outside these hours by appointment.',
+    area: 'Preveza town and the Ionian coast north of it; Filippiada and the Ziros villages. Elsewhere in Greece case by case.',
+    response: 'We answer email and phone messages ourselves. Property visits are arranged by phone.',
+    guests: "Guests of L'Incanto Apartments: bookings and stay questions go to lincanto.gr.",
+  },
+  el: {
+    metaTitle: 'Επικοινωνία με την SM Holdings | Πρέβεζα',
+    metaDescription: 'Επικοινωνήστε με την SM Holdings στη Φιλιππιάδα Πρέβεζας: διεύθυνση, τηλέφωνο, κινητό, email, ωράριο γραφείου (Τρίτη & Πέμπτη 9:00–13:00), στοιχεία εταιρείας και φόρμα για ιδιοκτήτες, ενοικιαστές, αγοραστές και επενδυτές.',
+    breadcrumb: 'Επικοινωνία',
+    h1: 'Επικοινωνία με την SM Holdings',
+    intro: 'Ένα γραφείο, ένα τηλέφωνο, για ιδιοκτήτες, ενοικιαστές, επισκέπτες και επενδυτές στην περιοχή της Πρέβεζας. Χρησιμοποιήστε τη φόρμα και πείτε μας τι αφορά το αίτημά σας — πηγαίνει απευθείας στους ανθρώπους που θα το χειριστούν.',
+    details: 'Στοιχεία γραφείου και εταιρείας',
+    formTitle: 'Στείλτε αίτημα',
+    map: 'Τοποθεσία γραφείου: Α. Παναγούλη 2, Φιλιππιάδα',
+    rows: {
+      legal: 'Επωνυμία', address: 'Διεύθυνση', phone: 'Τηλέφωνο', mobile: 'Κινητό', email: 'Email', hours: 'Ωράριο γραφείου', area: 'Περιοχή εξυπηρέτησης', response: 'Πώς απαντάμε', gemi: 'ΓΕΜΗ', vat: 'ΑΦΜ',
+    },
+    hours: 'Τρίτη & Πέμπτη, 9:00–13:00. Επισκέψεις εκτός ωραρίου κατόπιν ραντεβού.',
+    area: 'Πόλη της Πρέβεζας και η ακτή του Ιονίου βόρειά της· Φιλιππιάδα και τα χωριά του Ζηρού. Αλλού στην Ελλάδα κατά περίπτωση.',
+    response: 'Απαντάμε οι ίδιοι σε email και τηλεφωνικά μηνύματα. Οι επισκέψεις σε ακίνητα κανονίζονται τηλεφωνικά.',
+    guests: "Επισκέπτες των L'Incanto Apartments: κρατήσεις και ερωτήσεις διαμονής στο lincanto.gr.",
+  },
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params
-  const isEl = lang === 'el' || lang === 'gr'
-  const title = isEl ? 'Επικοινωνία | SMH Real Estate' : 'Contact Us | SMH Real Estate'
-  const description = isEl
-    ? 'Επικοινωνήστε μαζί μας για ακίνητα στην Ελλάδα. Η ομάδα της SMH Real Estate είναι έτοιμη να σας βοηθήσει με μισθώσεις, διαχείριση και επενδύσεις.'
-    : 'Get in touch with SMH Real Estate. Our team is ready to help you with rentals, property management, and investment opportunities across Greece.'
-  return {
-    title,
-    description,
-    keywords: getSEOKeywords('contact', isEl ? 'el' : 'en'),
-    alternates: { canonical: `${BASE_URL}/${lang}/contact`, languages: { 'el-GR': `${BASE_URL}/el/contact`, 'en-US': `${BASE_URL}/en/contact`, 'x-default': `${BASE_URL}/en/contact` } },
-    openGraph: { title, description, url: `${BASE_URL}/${lang}/contact`, type: 'website', locale: isEl ? 'el_GR' : 'en_US', images: [{ url: `${BASE_URL}/og-image.png`, width: 1200, height: 630, alt: title }] },
-    twitter: { card: 'summary_large_image', title, description },
-  }
+  const c = C[toLocale(lang)]
+  return pageMetadata({ lang, key: 'contact', title: c.metaTitle, description: c.metaDescription })
 }
 
 export default async function ContactPage({ params }: Props) {
   const { lang } = await params
-  const normalizedLang = lang === 'el' || lang === 'gr' ? 'el' : 'en'
-  const dict = await getDictionary(normalizedLang)
-  
+  const locale = toLocale(lang)
+  const c = C[locale]
+  const addr = locale === 'el' ? BUSINESS.addressEl : BUSINESS.address
+
+  const rows: { label: string; value: string; href?: string }[] = [
+    { label: c.rows.legal, value: `${BUSINESS.legalName} (${BUSINESS.name})` },
+    { label: c.rows.address, value: `${addr.streetAddress}, ${addr.addressLocality} ${addr.postalCode}, ${addr.addressRegion}` },
+    { label: c.rows.phone, value: '+30 2683 022 484', href: `tel:${BUSINESS.telephone}` },
+    { label: c.rows.mobile, value: '+30 698 413 2555', href: `tel:${BUSINESS.mobile}` },
+    { label: c.rows.email, value: BUSINESS.email, href: `mailto:${BUSINESS.email}` },
+    { label: c.rows.hours, value: c.hours },
+    { label: c.rows.area, value: c.area },
+    { label: c.rows.response, value: c.response },
+    { label: c.rows.gemi, value: BUSINESS.gemiNumber },
+    { label: c.rows.vat, value: BUSINESS.vatID },
+  ]
+
   return (
     <>
+      <OrganizationSchema lang={locale} />
       <Header />
       <main className="flex-1 min-h-screen bg-white">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-gray-50 to-gray-100 py-16 lg:py-24">
+        <section className="bg-gradient-to-br from-gray-50 to-gray-100 py-12 lg:py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto">
-              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                {dict.contact?.title || 'Contact Us'}
-              </h1>
-              <p className="text-xl text-gray-600 leading-relaxed">
-                {dict.contact?.subtitle || 'We\'d love to hear from you. Get in touch with our team and we\'ll respond as soon as possible.'}
-              </p>
+            <div className="mb-6">
+              <Breadcrumbs items={[{ name: COMMON.home[locale], href: localePath(locale, 'home') }, { name: c.breadcrumb, href: localePath(locale, 'contact') }]} />
+            </div>
+            <div className="max-w-3xl">
+              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">{c.h1}</h1>
+              <p className="text-lg lg:text-xl text-gray-600 leading-relaxed">{c.intro}</p>
             </div>
           </div>
         </section>
 
-        {/* Contact Information & Form */}
-        <section className="py-16 lg:py-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              {/* Contact Information */}
-              <div>
-                <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-8">
-                  {dict.contact?.info?.title || 'Get in Touch'}
-                </h2>
-                <div className="space-y-6">
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0">
-                      <div className="w-12 h-12 bg-accent-blue rounded-lg flex items-center justify-center">
-                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                      </div>
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                        {dict.contact?.info?.addressLabel || 'Address'}
-                      </h3>
-                      <p className="text-gray-600">
-                        {dict.contact?.info?.address || '123 Main Street, Suite 100, City, State 12345'}
-                      </p>
-                    </div>
+        <section className="py-14 lg:py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div>
+              <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-6">{c.details}</h2>
+              <dl className="divide-y divide-gray-200 border-y border-gray-200 mb-8">
+                {rows.map((r) => (
+                  <div key={r.label} className="grid grid-cols-1 sm:grid-cols-3 gap-1 sm:gap-4 py-3">
+                    <dt className="text-sm font-medium text-gray-500">{r.label}</dt>
+                    <dd className="sm:col-span-2 text-gray-900">{r.href ? <a href={r.href} className="text-accent-blue hover:underline">{r.value}</a> : r.value}</dd>
                   </div>
-
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0">
-                      <div className="w-12 h-12 bg-accent-blue rounded-lg flex items-center justify-center">
-                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                        </svg>
-                      </div>
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                        {dict.contact?.info?.phoneLabel || 'Phone'}
-                      </h3>
-                      <a href="tel:+1234567890" className="text-gray-600 hover:text-accent-blue transition-colors">
-                        {dict.contact?.info?.phone || '+1 (234) 567-8900'}
-                      </a>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0">
-                      <div className="w-12 h-12 bg-accent-blue rounded-lg flex items-center justify-center">
-                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                      </div>
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                        {dict.contact?.info?.emailLabel || 'Email'}
-                      </h3>
-                      <a href="mailto:info@example.com" className="text-gray-600 hover:text-accent-blue transition-colors">
-                        {dict.contact?.info?.email || 'info@example.com'}
-                      </a>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0">
-                      <div className="w-12 h-12 bg-accent-blue rounded-lg flex items-center justify-center">
-                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                        {dict.contact?.info?.hoursLabel || 'Business Hours'}
-                      </h3>
-                      <p className="text-gray-600">
-                        {dict.contact?.info?.hours || 'Monday - Friday: 9:00 AM - 6:00 PM<br />Saturday: 10:00 AM - 4:00 PM<br />Sunday: Closed'}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Map Placeholder */}
-                <div className="mt-8 bg-gray-100 rounded-lg aspect-video flex items-center justify-center">
-                  <span className="text-gray-400 text-lg">Map Location</span>
-                </div>
-              </div>
-
-              {/* Contact Form */}
-              <div>
-                <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-8">
-                  {dict.contact?.form?.title || 'Send us a Message'}
-                </h2>
-                <form className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        {dict.contact?.form?.firstName || 'First Name'}
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-blue"
-                        placeholder={dict.contact?.form?.firstNamePlaceholder || 'John'}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        {dict.contact?.form?.lastName || 'Last Name'}
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-blue"
-                        placeholder={dict.contact?.form?.lastNamePlaceholder || 'Doe'}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {dict.contact?.form?.email || 'Email'}
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-blue"
-                      placeholder={dict.contact?.form?.emailPlaceholder || 'john.doe@example.com'}
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {dict.contact?.form?.phone || 'Phone (Optional)'}
-                    </label>
-                    <input
-                      type="tel"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-blue"
-                      placeholder={dict.contact?.form?.phonePlaceholder || '+1 XXX XXX XXXX'}
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {dict.contact?.form?.subject || 'Subject'}
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-blue"
-                      placeholder={dict.contact?.form?.subjectPlaceholder || 'How can we help you?'}
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {dict.contact?.form?.message || 'Message'}
-                    </label>
-                    <textarea
-                      rows={6}
-                      required
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-blue"
-                      placeholder={dict.contact?.form?.messagePlaceholder || 'Tell us about your inquiry...'}
-                    />
-                  </div>
-                  
-                  <button
-                    type="submit"
-                    className="w-full px-6 py-3 bg-accent-blue text-white font-medium rounded-lg hover:bg-blue-600 transition-colors"
-                  >
-                    {dict.contact?.form?.submit || 'Send Message'}
-                  </button>
-                </form>
-              </div>
+                ))}
+              </dl>
+              <OfficeMap label={c.map} />
+              <p className="text-sm text-gray-500 mt-6">{c.guests} <a href={BUSINESS.lincanto.url} className="text-accent-blue hover:underline" target="_blank" rel="noopener">lincanto.gr</a></p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-6 lg:p-8">
+              <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-6">{c.formTitle}</h2>
+              <Suspense fallback={null}>
+                <ContactForm lang={locale} />
+              </Suspense>
             </div>
           </div>
         </section>

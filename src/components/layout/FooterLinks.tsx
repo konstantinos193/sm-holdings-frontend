@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useTranslation } from '@/lib/hooks/useTranslation'
 import { useLanguage } from '@/lib/contexts/LanguageContext'
+import { localePath } from '@/lib/seo/routes'
 
 export const FooterLinks = () => {
   const t = useTranslation()
@@ -13,7 +14,7 @@ export const FooterLinks = () => {
     <div>
       {/* Logo */}
       <div className="mb-6">
-        <Link href={`/${language}`} className="inline-block">
+        <Link href={localePath(language, 'home')} className="inline-block">
           <Image
             src="/logoetc.png"
             alt="SMH Real Estate"
@@ -27,7 +28,9 @@ export const FooterLinks = () => {
       
       {/* Company Description */}
       <p className="text-gray-400 text-sm leading-relaxed mb-6">
-        Your trusted partner for premium real estate services, property management, and exceptional hospitality experiences in Greece.
+        {language === 'el'
+          ? 'Διαχείριση ακινήτων, ακίνητα και φιλοξενία στην Πρέβεζα. Έδρα Φιλιππιάδα· λειτουργούμε τα L\'Incanto Apartments στα Χρονέικα.'
+          : "Property management, real estate and hospitality in Preveza. Based in Filippiada; operator of L'Incanto Apartments in Chroneika."}
       </p>
     </div>
   )
