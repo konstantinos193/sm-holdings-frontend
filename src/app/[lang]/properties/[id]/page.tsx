@@ -21,7 +21,7 @@ type Props = {
 
 async function fetchProperty(id: string): Promise<Property | null> {
   try {
-    const res = await serverFetch<{ success: boolean; data: Property }>(`/properties/${id}`)
+    const res = await serverFetch<{ success: boolean; data: Property }>(`/properties/${id}`, { cache: 'force-cache', next: { revalidate: 60 } })
     return res.success ? res.data : null
   } catch {
     return null

@@ -77,7 +77,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const response = await serverFetch<{
       success: boolean
       data: { properties: { id: string; titleEn: string; titleGr?: string; city?: string; status?: string; updatedAt: string; images?: string[] }[] }
-    }>('/properties?limit=500&page=1')
+    }>('/properties?limit=500&page=1', { cache: 'force-cache', next: { revalidate: 3600 } })
 
     if (response.success) {
       propertyEntries = response.data.properties

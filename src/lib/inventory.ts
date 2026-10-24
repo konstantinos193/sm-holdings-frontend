@@ -8,7 +8,7 @@ import type { Property } from '@/types/property'
  */
 export async function fetchAllProperties(): Promise<Property[]> {
   try {
-    const res = await serverFetch<{ success: boolean; data: { properties: Property[] } }>('/properties?limit=500&page=1')
+    const res = await serverFetch<{ success: boolean; data: { properties: Property[] } }>('/properties?limit=500&page=1', { cache: 'force-cache', next: { revalidate: 60 } })
     return res.success ? res.data.properties.filter((p) => !p.status || p.status === 'ACTIVE') : []
   } catch {
     return []

@@ -75,7 +75,7 @@ const nextConfig = {
     root: path.resolve(__dirname),
   },
   experimental: {
-    optimizePackageImports: ['@prisma/client', 'zod', 'react-icons'],
+    optimizePackageImports: ['zod', 'react-icons'],
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? {

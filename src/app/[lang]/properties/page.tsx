@@ -60,7 +60,7 @@ export default async function PropertiesPage({ params, searchParams }: Props) {
   }> = []
 
   try {
-    const response = await serverFetch<{ success: boolean; data: { properties: any[] } }>('/properties?limit=20&page=1')
+    const response = await serverFetch<{ success: boolean; data: { properties: any[] } }>('/properties?limit=20&page=1', { cache: 'force-cache', next: { revalidate: 60 } })
     if (response.success) {
       propertiesForSchema = response.data.properties.map((p: any) => ({
         id: p.id,
