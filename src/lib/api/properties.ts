@@ -141,7 +141,8 @@ export const propertiesApi = {
 
 // Server-side version for Server Components
 export async function searchPropertiesServer(
-  params: PropertySearchParams
+  params: PropertySearchParams,
+  options: Parameters<typeof serverFetch>[1] = {}
 ): Promise<PropertiesResponse> {
   if (USE_MOCK_DATA) {
     return filterMockProperties(params);
@@ -156,5 +157,5 @@ export async function searchPropertiesServer(
   });
 
   const query = searchParams.toString();
-  return serverFetch<PropertiesResponse>(`/properties${query ? `?${query}` : ''}`);
+  return serverFetch<PropertiesResponse>(`/properties${query ? `?${query}` : ''}`, options);
 }

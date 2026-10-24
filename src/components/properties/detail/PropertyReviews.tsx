@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { StarIcon } from '@/components/icons'
 import { reviewsApi } from '@/lib/api/reviews'
 import { Review } from '@/types/review'
@@ -31,10 +32,10 @@ export async function PropertyReviews({ propertyId, lang }: PropertyReviewsProps
     return (
       <div className="space-y-4">
         <h2 className="text-2xl font-semibold text-gray-900">
-          {lang === 'gr' ? 'Αξιολογήσεις' : 'Reviews'}
+          {(lang === 'el' || lang === 'gr') ? 'Αξιολογήσεις' : 'Reviews'}
         </h2>
         <p className="text-gray-600">
-          {lang === 'gr' 
+          {(lang === 'el' || lang === 'gr') 
             ? 'Δεν υπάρχουν αξιολογήσεις ακόμα.' 
             : 'No reviews yet.'}
         </p>
@@ -47,14 +48,14 @@ export async function PropertyReviews({ propertyId, lang }: PropertyReviewsProps
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-semibold text-gray-900">
-            {lang === 'gr' ? 'Αξιολογήσεις' : 'Reviews'}
+            {(lang === 'el' || lang === 'gr') ? 'Αξιολογήσεις' : 'Reviews'}
           </h2>
           {averageRating > 0 && (
             <div className="flex items-center gap-2">
               <StarIcon className="w-6 h-6 text-yellow-400 fill-yellow-400" />
               <span className="text-xl font-semibold">{averageRating.toFixed(1)}</span>
               <span className="text-gray-600">
-                ({totalReviews} {lang === 'gr' ? 'αξιολογήσεις' : 'reviews'})
+                ({totalReviews} {(lang === 'el' || lang === 'gr') ? 'αξιολογήσεις' : 'reviews'})
               </span>
             </div>
           )}
@@ -63,7 +64,7 @@ export async function PropertyReviews({ propertyId, lang }: PropertyReviewsProps
           <div className="bg-gray-50 rounded-lg p-4">
             <div className="flex items-center gap-3">
               <span className="font-medium text-gray-700">
-                {lang === 'gr' ? 'Μέση Καθαριότητα' : 'Average Cleanliness'}:
+                {(lang === 'el' || lang === 'gr') ? 'Μέση Καθαριότητα' : 'Average Cleanliness'}:
               </span>
               <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
@@ -91,10 +92,12 @@ export async function PropertyReviews({ propertyId, lang }: PropertyReviewsProps
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
                 {review.guest?.avatar ? (
-                  <img
+                  <Image
                     src={review.guest.avatar}
                     alt={review.guest.name}
-                    className="w-10 h-10 rounded-full"
+                    width={40}
+                    height={40}
+                    className="rounded-full"
                   />
                 ) : (
                   <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
@@ -130,7 +133,7 @@ export async function PropertyReviews({ propertyId, lang }: PropertyReviewsProps
               {review.cleanlinessRating && (
                 <div className="flex items-center gap-2 text-sm">
                   <span className="font-medium text-gray-700">
-                    {lang === 'gr' ? 'Καθαριότητα' : 'Cleanliness'}:
+                    {(lang === 'el' || lang === 'gr') ? 'Καθαριότητα' : 'Cleanliness'}:
                   </span>
                   <div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => (
@@ -150,7 +153,7 @@ export async function PropertyReviews({ propertyId, lang }: PropertyReviewsProps
               {review.accuracyRating && (
                 <div className="flex items-center gap-2 text-sm">
                   <span className="font-medium text-gray-700">
-                    {lang === 'gr' ? 'Ακρίβεια' : 'Accuracy'}:
+                    {(lang === 'el' || lang === 'gr') ? 'Ακρίβεια' : 'Accuracy'}:
                   </span>
                   <div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => (
@@ -170,7 +173,7 @@ export async function PropertyReviews({ propertyId, lang }: PropertyReviewsProps
               {review.communicationRating && (
                 <div className="flex items-center gap-2 text-sm">
                   <span className="font-medium text-gray-700">
-                    {lang === 'gr' ? 'Επικοινωνία' : 'Communication'}:
+                    {(lang === 'el' || lang === 'gr') ? 'Επικοινωνία' : 'Communication'}:
                   </span>
                   <div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => (
@@ -190,7 +193,7 @@ export async function PropertyReviews({ propertyId, lang }: PropertyReviewsProps
               {review.locationRating && (
                 <div className="flex items-center gap-2 text-sm">
                   <span className="font-medium text-gray-700">
-                    {lang === 'gr' ? 'Τοποθεσία' : 'Location'}:
+                    {(lang === 'el' || lang === 'gr') ? 'Τοποθεσία' : 'Location'}:
                   </span>
                   <div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => (
@@ -210,7 +213,7 @@ export async function PropertyReviews({ propertyId, lang }: PropertyReviewsProps
               {review.valueRating && (
                 <div className="flex items-center gap-2 text-sm">
                   <span className="font-medium text-gray-700">
-                    {lang === 'gr' ? 'Αξία' : 'Value'}:
+                    {(lang === 'el' || lang === 'gr') ? 'Αξία' : 'Value'}:
                   </span>
                   <div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => (

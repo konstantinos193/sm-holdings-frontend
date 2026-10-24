@@ -37,7 +37,7 @@ export default function BookingDetailPage() {
   }, [id])
 
   const handleCancel = async () => {
-    if (!booking || !confirm(lang === 'gr' ? 'Είστε σίγουροι ότι θέλετε να ακυρώσετε αυτή την κράτηση;' : 'Are you sure you want to cancel this booking?')) {
+    if (!booking || !confirm((lang === 'el' || lang === 'gr') ? 'Είστε σίγουροι ότι θέλετε να ακυρώσετε αυτή την κράτηση;' : 'Are you sure you want to cancel this booking?')) {
       return
     }
 
@@ -80,7 +80,7 @@ export default function BookingDetailPage() {
                 href={`/${lang}/bookings`}
                 className="mt-4 inline-block text-blue-600 hover:text-blue-700"
               >
-                {lang === 'gr' ? 'Πίσω στις κρατήσεις' : 'Back to bookings'}
+                {(lang === 'el' || lang === 'gr') ? 'Πίσω στις κρατήσεις' : 'Back to bookings'}
               </Link>
             </div>
           </div>
@@ -100,10 +100,10 @@ export default function BookingDetailPage() {
               href={`/${lang}/bookings`}
               className="text-blue-600 hover:text-blue-700 mb-4 inline-block"
             >
-              ← {lang === 'gr' ? 'Πίσω στις κρατήσεις' : 'Back to bookings'}
+              ← {(lang === 'el' || lang === 'gr') ? 'Πίσω στις κρατήσεις' : 'Back to bookings'}
             </Link>
             <h1 className="text-3xl font-bold text-gray-900">
-              {lang === 'gr' ? 'Λεπτομέρειες Κράτησης' : 'Booking Details'}
+              {(lang === 'el' || lang === 'gr') ? 'Λεπτομέρειες Κράτησης' : 'Booking Details'}
             </h1>
           </div>
 
@@ -137,19 +137,19 @@ export default function BookingDetailPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="text-sm font-medium text-gray-500 mb-2">
-                  {lang === 'gr' ? 'Κωδικός Κράτησης' : 'Booking ID'}
+                  {(lang === 'el' || lang === 'gr') ? 'Κωδικός Κράτησης' : 'Booking ID'}
                 </h3>
                 <p className="font-mono text-sm">{booking.id}</p>
               </div>
               <div>
                 <h3 className="text-sm font-medium text-gray-500 mb-2">
-                  {lang === 'gr' ? 'Κατάσταση Πληρωμής' : 'Payment Status'}
+                  {(lang === 'el' || lang === 'gr') ? 'Κατάσταση Πληρωμής' : 'Payment Status'}
                 </h3>
                 <p className="font-medium">{booking.paymentStatus}</p>
               </div>
               <div>
                 <h3 className="text-sm font-medium text-gray-500 mb-2">
-                  {lang === 'gr' ? 'Άφιξη' : 'Check-in'}
+                  {(lang === 'el' || lang === 'gr') ? 'Άφιξη' : 'Check-in'}
                 </h3>
                 <p className="font-medium">
                   {formatDateEU(booking.checkIn)}
@@ -157,7 +157,7 @@ export default function BookingDetailPage() {
               </div>
               <div>
                 <h3 className="text-sm font-medium text-gray-500 mb-2">
-                  {lang === 'gr' ? 'Αναχώρηση' : 'Check-out'}
+                  {(lang === 'el' || lang === 'gr') ? 'Αναχώρηση' : 'Check-out'}
                 </h3>
                 <p className="font-medium">
                   {formatDateEU(booking.checkOut)}
@@ -165,13 +165,13 @@ export default function BookingDetailPage() {
               </div>
               <div>
                 <h3 className="text-sm font-medium text-gray-500 mb-2">
-                  {lang === 'gr' ? 'Επισκέπτες' : 'Guests'}
+                  {(lang === 'el' || lang === 'gr') ? 'Επισκέπτες' : 'Guests'}
                 </h3>
                 <p className="font-medium">{booking.guests}</p>
               </div>
               <div>
                 <h3 className="text-sm font-medium text-gray-500 mb-2">
-                  {lang === 'gr' ? 'Σύνολο' : 'Total Price'}
+                  {(lang === 'el' || lang === 'gr') ? 'Σύνολο' : 'Total Price'}
                 </h3>
                 <p className="font-bold text-lg">
                   {booking.totalPrice.toFixed(2)} {booking.currency}
@@ -182,7 +182,7 @@ export default function BookingDetailPage() {
             {booking.specialRequests && (
               <div>
                 <h3 className="text-sm font-medium text-gray-500 mb-2">
-                  {lang === 'gr' ? 'Ειδικά Αιτήματα' : 'Special Requests'}
+                  {(lang === 'el' || lang === 'gr') ? 'Ειδικά Αιτήματα' : 'Special Requests'}
                 </h3>
                 <p className="text-gray-700">{booking.specialRequests}</p>
               </div>
@@ -195,7 +195,7 @@ export default function BookingDetailPage() {
                     onClick={handleCancel}
                     className="px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors"
                   >
-                    {lang === 'gr' ? 'Ακύρωση Κράτησης' : 'Cancel Booking'}
+                    {(lang === 'el' || lang === 'gr') ? 'Ακύρωση Κράτησης' : 'Cancel Booking'}
                   </button>
                 )}
                 {booking.propertyId && (
@@ -203,7 +203,7 @@ export default function BookingDetailPage() {
                     href={`/${lang}/properties/${booking.propertyId}`}
                     className="px-6 py-3 bg-gray-200 text-gray-900 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
                   >
-                    {lang === 'gr' ? 'Προβολή Ακινήτου' : 'View Property'}
+                    {(lang === 'el' || lang === 'gr') ? 'Προβολή Ακινήτου' : 'View Property'}
                   </Link>
                 )}
               </div>

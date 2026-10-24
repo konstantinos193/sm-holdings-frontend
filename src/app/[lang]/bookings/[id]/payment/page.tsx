@@ -110,7 +110,7 @@ export default function BookingPaymentPage() {
                 onClick={() => router.push(`/${lang}/bookings`)}
                 className="mt-4 text-blue-600 hover:text-blue-700"
               >
-                {lang === 'gr' ? 'Πίσω στις κρατήσεις' : 'Back to bookings'}
+                {(lang === 'el' || lang === 'gr') ? 'Πίσω στις κρατήσεις' : 'Back to bookings'}
               </button>
             </div>
           </div>
@@ -128,34 +128,34 @@ export default function BookingPaymentPage() {
       <main className="min-h-screen pt-20 pb-12 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">
-            {lang === 'gr' ? 'Ολοκλήρωση Πληρωμής' : 'Complete Payment'}
+            {(lang === 'el' || lang === 'gr') ? 'Ολοκλήρωση Πληρωμής' : 'Complete Payment'}
           </h1>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-6">
               <div className="bg-white rounded-lg shadow p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  {lang === 'gr' ? 'Στοιχεία Κράτησης' : 'Booking Details'}
+                  {(lang === 'el' || lang === 'gr') ? 'Στοιχεία Κράτησης' : 'Booking Details'}
                 </h2>
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">{lang === 'gr' ? 'Ακίνητο' : 'Property'}</span>
+                    <span className="text-gray-600">{(lang === 'el' || lang === 'gr') ? 'Ακίνητο' : 'Property'}</span>
                     <span className="font-medium">{booking.property?.titleEn || booking.property?.titleGr}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">{lang === 'gr' ? 'Άφιξη' : 'Check-in'}</span>
+                    <span className="text-gray-600">{(lang === 'el' || lang === 'gr') ? 'Άφιξη' : 'Check-in'}</span>
                     <span className="font-medium">
                       {formatDateEU(booking.checkIn)}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">{lang === 'gr' ? 'Αναχώρηση' : 'Check-out'}</span>
+                    <span className="text-gray-600">{(lang === 'el' || lang === 'gr') ? 'Αναχώρηση' : 'Check-out'}</span>
                     <span className="font-medium">
                       {formatDateEU(booking.checkOut)}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">{lang === 'gr' ? 'Επισκέπτες' : 'Guests'}</span>
+                    <span className="text-gray-600">{(lang === 'el' || lang === 'gr') ? 'Επισκέπτες' : 'Guests'}</span>
                     <span className="font-medium">{booking.guests}</span>
                   </div>
                 </div>
@@ -163,7 +163,7 @@ export default function BookingPaymentPage() {
 
               <div className="bg-white rounded-lg shadow p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  {lang === 'gr' ? 'Μέθοδος Πληρωμής' : 'Payment Method'}
+                  {(lang === 'el' || lang === 'gr') ? 'Μέθοδος Πληρωμής' : 'Payment Method'}
                 </h2>
                 <div className="space-y-3">
                   {(['CREDIT_CARD', 'DEBIT_CARD', 'APPLE_PAY', 'GOOGLE_PAY'] as PaymentMethod[]).map((method) => (
@@ -191,18 +191,18 @@ export default function BookingPaymentPage() {
             <div className="lg:col-span-1">
               <div className="bg-white rounded-lg shadow p-6 sticky top-24">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  {lang === 'gr' ? 'Σύνοψη' : 'Summary'}
+                  {(lang === 'el' || lang === 'gr') ? 'Σύνοψη' : 'Summary'}
                 </h2>
                 <div className="space-y-3 mb-6">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">{lang === 'gr' ? 'Βασική τιμή' : 'Base price'}</span>
+                    <span className="text-gray-600">{(lang === 'el' || lang === 'gr') ? 'Βασική τιμή' : 'Base price'}</span>
                     <span className="font-medium">
                       {booking.basePrice.toFixed(2)} {booking.currency}
                     </span>
                   </div>
                   {booking.cleaningFee > 0 && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">{lang === 'gr' ? 'Καθαρισμός' : 'Cleaning fee'}</span>
+                      <span className="text-gray-600">{(lang === 'el' || lang === 'gr') ? 'Καθαρισμός' : 'Cleaning fee'}</span>
                       <span className="font-medium">
                         {booking.cleaningFee.toFixed(2)} {booking.currency}
                       </span>
@@ -210,7 +210,7 @@ export default function BookingPaymentPage() {
                   )}
                   {booking.serviceFee > 0 && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">{lang === 'gr' ? 'Υπηρεσία' : 'Service fee'}</span>
+                      <span className="text-gray-600">{(lang === 'el' || lang === 'gr') ? 'Υπηρεσία' : 'Service fee'}</span>
                       <span className="font-medium">
                         {booking.serviceFee.toFixed(2)} {booking.currency}
                       </span>
@@ -218,14 +218,14 @@ export default function BookingPaymentPage() {
                   )}
                   {booking.taxes > 0 && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">{lang === 'gr' ? 'Φόροι' : 'Taxes'}</span>
+                      <span className="text-gray-600">{(lang === 'el' || lang === 'gr') ? 'Φόροι' : 'Taxes'}</span>
                       <span className="font-medium">
                         {booking.taxes.toFixed(2)} {booking.currency}
                       </span>
                     </div>
                   )}
                   <div className="flex justify-between pt-3 border-t border-gray-200 font-semibold text-lg">
-                    <span>{lang === 'gr' ? 'Σύνολο' : 'Total'}</span>
+                    <span>{(lang === 'el' || lang === 'gr') ? 'Σύνολο' : 'Total'}</span>
                     <span>
                       {booking.totalPrice.toFixed(2)} {booking.currency}
                     </span>
@@ -244,8 +244,8 @@ export default function BookingPaymentPage() {
                   className="w-full bg-accent-blue text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {processing
-                    ? (lang === 'gr' ? 'Επεξεργασία...' : 'Processing...')
-                    : (lang === 'gr' ? 'Ολοκλήρωση Πληρωμής' : 'Complete Payment')}
+                    ? ((lang === 'el' || lang === 'gr') ? 'Επεξεργασία...' : 'Processing...')
+                    : ((lang === 'el' || lang === 'gr') ? 'Ολοκλήρωση Πληρωμής' : 'Complete Payment')}
                 </button>
               </div>
             </div>

@@ -91,10 +91,10 @@ export function PropertyAmenities({ amenities, lang }: PropertyAmenitiesProps) {
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6">
         <h2 className="text-2xl font-bold text-white flex items-center gap-3">
           <div className="w-2 h-8 bg-white rounded-full opacity-80"></div>
-          {lang === 'gr' ? 'Παροχές & Ανέσεις' : 'Amenities & Facilities'}
+          {(lang === 'el' || lang === 'gr') ? 'Παροχές & Ανέσεις' : 'Amenities & Facilities'}
         </h2>
         <p className="text-blue-100 text-sm mt-2">
-          {lang === 'gr' 
+          {(lang === 'el' || lang === 'gr') 
             ? 'Όλες οι παροχές που θα κάνουν τη διαμονή σας άνετη'
             : 'All the amenities to make your stay comfortable'}
         </p>
@@ -110,7 +110,7 @@ export function PropertyAmenities({ amenities, lang }: PropertyAmenitiesProps) {
             <div key={category} className={`${colors.bg} rounded-2xl p-6 border ${colors.border}`}>
               <h3 className="text-lg font-bold text-gray-800 mb-6 flex items-center gap-3">
                 <div className={`w-3 h-3 ${colors.text.replace('text', 'bg')} rounded-full`}></div>
-                {lang === 'gr' ? categoryNames.gr : categoryNames.en}
+                {(lang === 'el' || lang === 'gr') ? categoryNames.gr : categoryNames.en}
                 <span className={`text-sm ${colors.text} font-normal bg-white px-2 py-1 rounded-full border ${colors.border}`}>
                   {categoryAmenities.length}
                 </span>
@@ -129,7 +129,7 @@ export function PropertyAmenities({ amenities, lang }: PropertyAmenitiesProps) {
                     </div>
                     <div className="flex-1">
                       <span className="text-gray-700 font-medium text-sm leading-tight">
-                        {lang === 'gr' ? amenity.nameGr : amenity.nameEn}
+                        {(lang === 'el' || lang === 'gr') ? amenity.nameGr : amenity.nameEn}
                       </span>
                     </div>
                   </div>

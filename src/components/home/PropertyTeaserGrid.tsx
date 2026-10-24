@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import type { Property } from '@/types/property'
 import { propertyPath, toLocale } from '@/lib/seo/routes'
 
@@ -27,8 +28,7 @@ export function PropertyTeaserGrid({ properties, lang }: { properties: Property[
             <Link href={propertyPath(locale, p)} className="group block h-full bg-white rounded-lg border border-gray-200 overflow-hidden hover:border-gray-400 hover:shadow-md transition-all">
               <div className="relative h-44 bg-gray-100">
                 {image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={image} alt={`${title}, ${p.city}`} className="w-full h-full object-cover" loading="lazy" width={640} height={352} />
+                  <Image src={image} alt={`${title}, ${p.city}`} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">{type}</div>
                 )}

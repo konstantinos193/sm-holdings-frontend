@@ -3,7 +3,7 @@ import { PropertyImageGallery } from './PropertyImageGallery'
 import { PropertyInfo } from './PropertyInfo'
 import { PropertyAmenities } from './PropertyAmenities'
 import { PropertyInquiryForm } from './PropertyInquiryForm'
-import { PropertyMap } from './PropertyMap'
+import PropertyMap from './PropertyMapLoader'
 import { PropertyReviews } from './PropertyReviews'
 import { PropertyOwner } from './PropertyOwner'
 import { Property } from '@/types/property'
@@ -37,7 +37,7 @@ export async function PropertyDetailContent({ lang, propertyId }: PropertyDetail
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
       <div className="max-w-7xl mx-auto">
-        <PropertyImageGallery images={property.images} title={lang === 'gr' ? property.titleGr : property.titleEn} />
+        <PropertyImageGallery images={property.images} title={(lang === 'el' || lang === 'gr') ? property.titleGr : property.titleEn} />
         
         <div className="px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-12 lg:gap-16">

@@ -4,6 +4,10 @@ import { BUSINESS } from '@/lib/seo/business'
 import { OG_IMAGE } from '@/lib/seo/metadata'
 import { toLocale } from '@/lib/seo/routes'
 
+export function generateStaticParams() {
+  return [{ lang: 'en' }, { lang: 'el' }]
+}
+
 type Props = {
   children: React.ReactNode
   params: Promise<{ lang: string }>

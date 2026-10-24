@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Header } from '@/components/layout/Header'
@@ -28,11 +29,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 async function fetchAvailableProperties(): Promise<Property[]> {
   try {
-    const response = await searchPropertiesServer({ limit: '8', page: '1', sortBy: 'createdAt', sortOrder: 'desc' })
+    const response = await searchPropertiesServer(
+      { limit: '8', page: '1', sortBy: 'createdAt', sortOrder: 'desc' },
+      { cache: 'force-cache', next: { revalidate: 300 }, signal: AbortSignal.timeout(3000) }
+    )
     return response.data.properties.filter((p) => !p.status || p.status === 'ACTIVE').slice(0, 8)
   } catch {
     return []
   }
+}
+
+async function HomeInventory({ lang }: { lang: 'en' | 'el' }) {
+  const properties = await fetchAvailableProperties()
+  return properties.length
+    ? <PropertyTeaserGrid properties={properties} lang={lang} />
+    : <p className="text-gray-600">{home[lang].inventory.empty}</p>
 }
 
 const CardGrid = ({ lang, cards }: { lang: string; cards: { key: Parameters<typeof localePath>[1]; title: string; text: string }[] }) => (
@@ -50,7 +61,6 @@ export default async function HomePage({ params }: Props) {
   const { lang } = await params
   const locale = toLocale(lang)
   const c = home[locale]
-  const properties = await fetchAvailableProperties()
   const btn = 'inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold transition-colors'
 
   return (
@@ -114,7 +124,9 @@ export default async function HomePage({ params }: Props) {
               </div>
               <Link href={localePath(locale, 'properties')} className="text-accent-blue font-medium hover:underline">{c.inventory.all} →</Link>
             </div>
-            {properties.length ? <PropertyTeaserGrid properties={properties} lang={locale} /> : <p className="text-gray-600">{c.inventory.empty}</p>}
+            <Suspense fallback={<div className="h-72 rounded-lg bg-gray-100" aria-busy="true" />}>
+              <HomeInventory lang={locale} />
+            </Suspense>
           </div>
         </section>
 

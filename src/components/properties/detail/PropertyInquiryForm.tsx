@@ -36,7 +36,7 @@ export function PropertyInquiryForm({ property, lang }: PropertyInquiryFormProps
     setSuccess(false)
 
     if (!name || !email) {
-      setError(lang === 'gr' ? 'Παρακαλώ συμπληρώστε όνομα και email' : 'Please fill in name and email')
+      setError((lang === 'el' || lang === 'gr') ? 'Παρακαλώ συμπληρώστε όνομα και email' : 'Please fill in name and email')
       return
     }
 
@@ -73,10 +73,10 @@ export function PropertyInquiryForm({ property, lang }: PropertyInquiryFormProps
         
         <div className="relative z-10">
           <h3 className="text-3xl font-bold text-white mb-3">
-            {lang === 'gr' ? 'Επικοινωνία' : 'Contact Us'}
+            {(lang === 'el' || lang === 'gr') ? 'Επικοινωνία' : 'Contact Us'}
           </h3>
           <p className="text-blue-100 text-base leading-relaxed">
-            {lang === 'gr' 
+            {(lang === 'el' || lang === 'gr') 
               ? 'Ενδιαφέρεστε για αυτό το ακίνητο; Στείλτε μας ένα μήνυμα και θα επικοινωνήσουμε μαζί σας το συντομότερο δυνατό.'
               : 'Interested in this property? Send us a message and we\'ll get back to you as soon as possible.'}
           </p>
@@ -92,11 +92,11 @@ export function PropertyInquiryForm({ property, lang }: PropertyInquiryFormProps
                 {property.basePrice.toLocaleString()} {property.currency}
               </span>
               <span className="text-sm font-semibold text-emerald-600 bg-emerald-100 px-3 py-1 rounded-full border border-emerald-200">
-                {lang === 'gr' ? 'Από' : 'From'} / {lang === 'gr' ? 'διανυκτέρευση' : 'night'}
+                {(lang === 'el' || lang === 'gr') ? 'Από' : 'From'} / {(lang === 'el' || lang === 'gr') ? 'διανυκτέρευση' : 'night'}
               </span>
             </div>
             <div className="text-sm text-gray-600">
-              {property.maxGuests} {lang === 'gr' ? 'Επισκέπτες' : 'Guests'} max
+              {property.maxGuests} {(lang === 'el' || lang === 'gr') ? 'Επισκέπτες' : 'Guests'} max
             </div>
           </div>
         </div>
@@ -108,13 +108,13 @@ export function PropertyInquiryForm({ property, lang }: PropertyInquiryFormProps
           <div className="grid grid-cols-1 gap-6">
             <div className="space-y-2">
               <label className="block text-sm font-bold text-gray-700 uppercase tracking-wide">
-                {lang === 'gr' ? 'Ονοματεπώνυμο' : 'Full Name'} *
+                {(lang === 'el' || lang === 'gr') ? 'Ονοματεπώνυμο' : 'Full Name'} *
               </label>
               <CustomInput
                 type="text"
                 value={name}
                 onChange={setName}
-                placeholder={lang === 'gr' ? 'Το ονοματεπώνυμό σας' : 'Your full name'}
+                placeholder={(lang === 'el' || lang === 'gr') ? 'Το ονοματεπώνυμό σας' : 'Your full name'}
                 required
                 className="w-full px-5 py-4 text-base border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-300"
               />
@@ -122,7 +122,7 @@ export function PropertyInquiryForm({ property, lang }: PropertyInquiryFormProps
 
             <div className="space-y-2">
               <label className="block text-sm font-bold text-gray-700 uppercase tracking-wide">
-                {lang === 'gr' ? 'Email' : 'Email'} *
+                {(lang === 'el' || lang === 'gr') ? 'Email' : 'Email'} *
               </label>
               <CustomInput
                 type="email"
@@ -136,25 +136,25 @@ export function PropertyInquiryForm({ property, lang }: PropertyInquiryFormProps
 
             <div className="space-y-2">
               <label className="block text-sm font-bold text-gray-700 uppercase tracking-wide">
-                {lang === 'gr' ? 'Τηλέφωνο' : 'Phone'} 
+                {(lang === 'el' || lang === 'gr') ? 'Τηλέφωνο' : 'Phone'} 
                 <span className="font-normal text-gray-500 ml-2">
-                  ({lang === 'gr' ? 'προαιρετικό' : 'optional'})
+                  ({(lang === 'el' || lang === 'gr') ? 'προαιρετικό' : 'optional'})
                 </span>
               </label>
               <CustomInput
                 type="tel"
                 value={phone}
                 onChange={setPhone}
-                placeholder={lang === 'gr' ? '+30 123 456 7890' : '+1 234 567 8900'}
+                placeholder={(lang === 'el' || lang === 'gr') ? '+30 123 456 7890' : '+1 234 567 8900'}
                 className="w-full px-5 py-4 text-base border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-300"
               />
             </div>
 
             <div className="space-y-2">
               <label className="block text-sm font-bold text-gray-700 uppercase tracking-wide">
-                {lang === 'gr' ? 'Μήνυμα' : 'Message'} 
+                {(lang === 'el' || lang === 'gr') ? 'Μήνυμα' : 'Message'} 
                 <span className="font-normal text-gray-500 ml-2">
-                  ({lang === 'gr' ? 'προαιρετικό' : 'optional'})
+                  ({(lang === 'el' || lang === 'gr') ? 'προαιρετικό' : 'optional'})
                 </span>
               </label>
               <textarea
@@ -162,7 +162,7 @@ export function PropertyInquiryForm({ property, lang }: PropertyInquiryFormProps
                 onChange={(e) => setMessage(e.target.value)}
                 rows={6}
                 className="w-full px-5 py-4 text-base border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 resize-none hover:border-gray-300"
-                placeholder={lang === 'gr' 
+                placeholder={(lang === 'el' || lang === 'gr') 
                   ? 'Πείτε μας περισσότερα για το ενδιαφέρον σας για αυτό το ακίνητο...' 
                   : 'Tell us more about your interest in this property...'}
               />
@@ -178,7 +178,7 @@ export function PropertyInquiryForm({ property, lang }: PropertyInquiryFormProps
                 </svg>
               </div>
               <div>
-                <span className="font-semibold">{lang === 'gr' ? 'Σφάλμα:' : 'Error:'}</span>
+                <span className="font-semibold">{(lang === 'el' || lang === 'gr') ? 'Σφάλμα:' : 'Error:'}</span>
                 <span className="ml-2">{error}</span>
               </div>
             </div>
@@ -192,8 +192,8 @@ export function PropertyInquiryForm({ property, lang }: PropertyInquiryFormProps
                 </svg>
               </div>
               <div>
-                <span className="font-semibold">{lang === 'gr' ? 'Επιτυχία!' : 'Success!'}</span>
-                <span className="ml-2">{lang === 'gr' 
+                <span className="font-semibold">{(lang === 'el' || lang === 'gr') ? 'Επιτυχία!' : 'Success!'}</span>
+                <span className="ml-2">{(lang === 'el' || lang === 'gr') 
                   ? 'Το μήνυμά σας στάλθηκε επιτυχώς! Θα επικοινωνήσουμε μαζί σας σύντομα.'
                   : 'Your message has been sent successfully! We\'ll contact you soon.'}</span>
               </div>
@@ -209,13 +209,13 @@ export function PropertyInquiryForm({ property, lang }: PropertyInquiryFormProps
             <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
             <span className="relative z-10">
               {loading
-                ? (lang === 'gr' ? 'Αποστολή...' : 'Sending...')
-                : (lang === 'gr' ? 'Στείλτε το Μήνυμά σας' : 'Send Your Message')}
+                ? ((lang === 'el' || lang === 'gr') ? 'Αποστολή...' : 'Sending...')
+                : ((lang === 'el' || lang === 'gr') ? 'Στείλτε το Μήνυμά σας' : 'Send Your Message')}
             </span>
           </button>
           
           <p className="text-xs text-gray-500 text-center">
-            {lang === 'gr' 
+            {(lang === 'el' || lang === 'gr') 
               ? 'Απαντάμε συνήθως εντός 24 ωρών.'
               : 'We typically respond within 24 hours.'}
           </p>

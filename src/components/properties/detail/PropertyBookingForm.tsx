@@ -78,13 +78,13 @@ export function PropertyBookingForm({ property, lang }: PropertyBookingFormProps
     setError(null)
 
     if (!checkIn || !checkOut) {
-      setError(lang === 'gr' ? 'Παρακαλώ επιλέξτε ημερομηνίες' : 'Please select dates')
+      setError((lang === 'el' || lang === 'gr') ? 'Παρακαλώ επιλέξτε ημερομηνίες' : 'Please select dates')
       return
     }
 
     if (guests > property.maxGuests) {
       setError(
-        lang === 'gr' 
+        (lang === 'el' || lang === 'gr') 
           ? `Μέγιστος αριθμός επισκεπτών: ${property.maxGuests}`
           : `Maximum guests: ${property.maxGuests}`
       )
@@ -92,7 +92,7 @@ export function PropertyBookingForm({ property, lang }: PropertyBookingFormProps
     }
 
     if (!guestName || !guestEmail) {
-      setError(lang === 'gr' ? 'Παρακαλώ συμπληρώστε όνομα και email' : 'Please fill in name and email')
+      setError((lang === 'el' || lang === 'gr') ? 'Παρακαλώ συμπληρώστε όνομα και email' : 'Please fill in name and email')
       return
     }
 
@@ -133,12 +133,12 @@ export function PropertyBookingForm({ property, lang }: PropertyBookingFormProps
           {/* Hide daily rate for long-term rentals (minStay >= 30 days) */}
           {(!property.minStay || property.minStay < 30) && (
             <span className="text-gray-600">
-              {lang === 'gr' ? 'ανά βράδυ' : 'per night'}
+              {(lang === 'el' || lang === 'gr') ? 'ανά βράδυ' : 'per night'}
             </span>
           )}
           {property.minStay && property.minStay >= 30 && (
             <span className="text-gray-600">
-              {lang === 'gr' ? 'ανά μήνα' : 'per month'}
+              {(lang === 'el' || lang === 'gr') ? 'ανά μήνα' : 'per month'}
             </span>
           )}
         </div>
@@ -148,23 +148,23 @@ export function PropertyBookingForm({ property, lang }: PropertyBookingFormProps
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              {lang === 'gr' ? 'Άφιξη' : 'Check-in'}
+              {(lang === 'el' || lang === 'gr') ? 'Άφιξη' : 'Check-in'}
             </label>
             <CustomDatePicker
               value={checkIn || ''}
               onChange={setCheckIn}
-              placeholder={lang === 'gr' ? 'Επιλέξτε ημερομηνία' : 'Select date'}
+              placeholder={(lang === 'el' || lang === 'gr') ? 'Επιλέξτε ημερομηνία' : 'Select date'}
               minDate={minCheckInDate}
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              {lang === 'gr' ? 'Αναχώρηση' : 'Check-out'}
+              {(lang === 'el' || lang === 'gr') ? 'Αναχώρηση' : 'Check-out'}
             </label>
             <CustomDatePicker
               value={checkOut || ''}
               onChange={setCheckOut}
-              placeholder={lang === 'gr' ? 'Επιλέξτε ημερομηνία' : 'Select date'}
+              placeholder={(lang === 'el' || lang === 'gr') ? 'Επιλέξτε ημερομηνία' : 'Select date'}
               minDate={minCheckOutDate}
             />
           </div>
@@ -172,7 +172,7 @@ export function PropertyBookingForm({ property, lang }: PropertyBookingFormProps
 
         <div>
           <label className="flex items-center gap-1.5 text-sm font-medium text-gray-700 mb-2">
-            {lang === 'gr' ? 'Επισκέπτες' : 'Guests'}
+            {(lang === 'el' || lang === 'gr') ? 'Επισκέπτες' : 'Guests'}
             <span className="text-xs font-normal text-gray-400">(18+)</span>
           </label>
           <CustomSelect
@@ -186,19 +186,19 @@ export function PropertyBookingForm({ property, lang }: PropertyBookingFormProps
           <>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                {lang === 'gr' ? 'Όνομα' : 'Full Name'} *
+                {(lang === 'el' || lang === 'gr') ? 'Όνομα' : 'Full Name'} *
               </label>
               <CustomInput
                 type="text"
                 value={guestName}
                 onChange={setGuestName}
-                placeholder={lang === 'gr' ? 'Το όνομά σας' : 'Your name'}
+                placeholder={(lang === 'el' || lang === 'gr') ? 'Το όνομά σας' : 'Your name'}
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                {lang === 'gr' ? 'Email' : 'Email'} *
+                {(lang === 'el' || lang === 'gr') ? 'Email' : 'Email'} *
               </label>
               <CustomInput
                 type="email"
@@ -210,13 +210,13 @@ export function PropertyBookingForm({ property, lang }: PropertyBookingFormProps
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                {lang === 'gr' ? 'Τηλέφωνο' : 'Phone'} (optional)
+                {(lang === 'el' || lang === 'gr') ? 'Τηλέφωνο' : 'Phone'} (optional)
               </label>
               <CustomInput
                 type="tel"
                 value={guestPhone}
                 onChange={setGuestPhone}
-                placeholder={lang === 'gr' ? '+30 123 456 7890' : '+1 234 567 8900'}
+                placeholder={(lang === 'el' || lang === 'gr') ? '+30 123 456 7890' : '+1 234 567 8900'}
               />
             </div>
           </>
@@ -224,14 +224,14 @@ export function PropertyBookingForm({ property, lang }: PropertyBookingFormProps
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            {lang === 'gr' ? 'Ειδικά αιτήματα' : 'Special Requests'} (optional)
+            {(lang === 'el' || lang === 'gr') ? 'Ειδικά αιτήματα' : 'Special Requests'} (optional)
           </label>
           <textarea
             value={specialRequests}
             onChange={(e) => setSpecialRequests(e.target.value)}
             rows={3}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder={lang === 'gr' ? 'Πείτε μας αν χρειάζεστε κάτι ειδικό...' : 'Tell us if you need anything special...'}
+            placeholder={(lang === 'el' || lang === 'gr') ? 'Πείτε μας αν χρειάζεστε κάτι ειδικό...' : 'Tell us if you need anything special...'}
           />
         </div>
 
@@ -240,30 +240,30 @@ export function PropertyBookingForm({ property, lang }: PropertyBookingFormProps
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">
                 {property.basePrice.toFixed(2)} {property.currency} × {nights}{' '}
-                {lang === 'gr' ? 'βράδια' : 'nights'}
+                {(lang === 'el' || lang === 'gr') ? 'βράδια' : 'nights'}
               </span>
               <span className="text-gray-900">{price.subtotal.toFixed(2)} {property.currency}</span>
             </div>
             {price.cleaning > 0 && (
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">{lang === 'gr' ? 'Καθαρισμός' : 'Cleaning fee'}</span>
+                <span className="text-gray-600">{(lang === 'el' || lang === 'gr') ? 'Καθαρισμός' : 'Cleaning fee'}</span>
                 <span className="text-gray-900">{price.cleaning.toFixed(2)} {property.currency}</span>
               </div>
             )}
             {price.service > 0 && (
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">{lang === 'gr' ? 'Υπηρεσία' : 'Service fee'}</span>
+                <span className="text-gray-600">{(lang === 'el' || lang === 'gr') ? 'Υπηρεσία' : 'Service fee'}</span>
                 <span className="text-gray-900">{price.service.toFixed(2)} {property.currency}</span>
               </div>
             )}
             {price.taxes > 0 && (
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">{lang === 'gr' ? 'Φόροι' : 'Taxes'}</span>
+                <span className="text-gray-600">{(lang === 'el' || lang === 'gr') ? 'Φόροι' : 'Taxes'}</span>
                 <span className="text-gray-900">{price.taxes.toFixed(2)} {property.currency}</span>
               </div>
             )}
             <div className="flex justify-between pt-2 border-t border-gray-200 font-semibold">
-              <span className="text-gray-900">{lang === 'gr' ? 'Σύνολο' : 'Total'}</span>
+              <span className="text-gray-900">{(lang === 'el' || lang === 'gr') ? 'Σύνολο' : 'Total'}</span>
               <span className="text-gray-900">{price.total.toFixed(2)} {property.currency}</span>
             </div>
           </div>
@@ -281,8 +281,8 @@ export function PropertyBookingForm({ property, lang }: PropertyBookingFormProps
           className="w-full bg-primary-blue hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
         >
           {loading
-            ? (lang === 'gr' ? 'Επεξεργασία...' : 'Processing...')
-            : (lang === 'gr' ? 'Κράτηση' : 'Book Now')}
+            ? ((lang === 'el' || lang === 'gr') ? 'Επεξεργασία...' : 'Processing...')
+            : ((lang === 'el' || lang === 'gr') ? 'Κράτηση' : 'Book Now')}
         </button>
       </form>
     </div>

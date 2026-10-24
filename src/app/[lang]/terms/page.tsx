@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function TermsPage({ params }: Props) {
   const { lang } = await params
-  const normalizedLang = lang === 'el' || lang === 'gr' ? 'el' : 'en'
+  const normalizedLang = lang === 'el' || (lang === 'el' || lang === 'gr') ? 'el' : 'en'
   const dict = await getDictionary(normalizedLang)
   
   return (

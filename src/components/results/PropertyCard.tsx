@@ -1,6 +1,7 @@
 'use client'
 
 import { memo, useMemo, useState, useEffect } from 'react'
+import Image from 'next/image'
 import { Property } from '@/types/property'
 import { useTranslation } from '@/lib/hooks/useTranslation'
 
@@ -53,10 +54,12 @@ const PropertyCardComponent = ({ property, lang = 'en' }: PropertyCardProps) => 
       <div className="bg-white rounded-lg shadow-md transition-all duration-300 overflow-hidden group">
         <div className="relative w-full h-48 sm:h-56 md:h-64 overflow-hidden bg-gray-200">
           {hasImage && imageUrl && !imageError ? (
-            <img
+            <Image
               src={imageUrl}
               alt={title}
-              className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+              fill
+              sizes="(min-width: 768px) 33vw, 100vw"
+              className="object-contain group-hover:scale-105 transition-transform duration-300"
               onError={() => setImageError(true)}
             />
           ) : (

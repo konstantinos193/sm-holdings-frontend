@@ -7,8 +7,8 @@ type PropertyInfoProps = {
 }
 
 export function PropertyInfo({ property, lang }: PropertyInfoProps) {
-  const title = lang === 'gr' ? property.titleGr : property.titleEn
-  const description = lang === 'gr' ? property.descriptionGr : property.descriptionEn
+  const title = (lang === 'el' || lang === 'gr') ? property.titleGr : property.titleEn
+  const description = (lang === 'el' || lang === 'gr') ? property.descriptionGr : property.descriptionEn
   const address = `${property.address}, ${property.city}, ${property.country}`
 
   const formatPropertyType = (type: string) => {
@@ -58,7 +58,7 @@ export function PropertyInfo({ property, lang }: PropertyInfoProps) {
                 </div>
                 {property.reviewCount && property.reviewCount > 0 && (
                   <span className="text-gray-600 text-sm font-medium mt-1">
-                    {property.reviewCount} {lang === 'gr' ? 'αξιολογήσεις' : 'reviews'}
+                    {property.reviewCount} {(lang === 'el' || lang === 'gr') ? 'αξιολογήσεις' : 'reviews'}
                   </span>
                 )}
               </div>
@@ -71,7 +71,7 @@ export function PropertyInfo({ property, lang }: PropertyInfoProps) {
       <div className="bg-gradient-to-br from-gray-50 via-white to-blue-50 rounded-3xl p-8 border border-gray-200 shadow-lg">
         <h2 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-3">
           <div className="w-2 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-full"></div>
-          {lang === 'gr' ? 'Βασικά Χαρακτηριστικά' : 'Property Details'}
+          {(lang === 'el' || lang === 'gr') ? 'Βασικά Χαρακτηριστικά' : 'Property Details'}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="text-center p-6 bg-white rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-300">
@@ -84,7 +84,7 @@ export function PropertyInfo({ property, lang }: PropertyInfoProps) {
             </div>
             <div className="text-3xl font-bold text-gray-900 mb-2">{property.bedrooms}</div>
             <div className="text-sm font-semibold text-gray-600 uppercase tracking-wide">
-              {lang === 'gr' ? 'Υπνοδωμάτια' : 'Bedrooms'}
+              {(lang === 'el' || lang === 'gr') ? 'Υπνοδωμάτια' : 'Bedrooms'}
             </div>
           </div>
           
@@ -98,7 +98,7 @@ export function PropertyInfo({ property, lang }: PropertyInfoProps) {
             </div>
             <div className="text-3xl font-bold text-gray-900 mb-2">{property.bathrooms}</div>
             <div className="text-sm font-semibold text-gray-600 uppercase tracking-wide">
-              {lang === 'gr' ? 'Μπάνια' : 'Bathrooms'}
+              {(lang === 'el' || lang === 'gr') ? 'Μπάνια' : 'Bathrooms'}
             </div>
           </div>
           
@@ -126,7 +126,7 @@ export function PropertyInfo({ property, lang }: PropertyInfoProps) {
             </div>
             <div className="text-3xl font-bold text-gray-900 mb-2">{property.maxGuests}</div>
             <div className="text-sm font-semibold text-gray-600 uppercase tracking-wide">
-              {lang === 'gr' ? 'Επισκέπτες' : 'Guests'}
+              {(lang === 'el' || lang === 'gr') ? 'Επισκέπτες' : 'Guests'}
             </div>
           </div>
         </div>
@@ -138,7 +138,7 @@ export function PropertyInfo({ property, lang }: PropertyInfoProps) {
           <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6">
             <h2 className="text-2xl font-bold text-white flex items-center gap-3">
               <div className="w-2 h-8 bg-white rounded-full opacity-80"></div>
-              {lang === 'gr' ? 'Περιγραφή' : 'Description'}
+              {(lang === 'el' || lang === 'gr') ? 'Περιγραφή' : 'Description'}
             </h2>
           </div>
           <div className="p-8">
