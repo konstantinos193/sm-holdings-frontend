@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import { LanguageProvider } from '@/lib/contexts/LanguageContext'
 import { BUSINESS } from '@/lib/seo/business'
 import { OG_IMAGE } from '@/lib/seo/metadata'
@@ -52,6 +53,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function LangLayout({ children, params }: Props) {
   const { lang } = await params
+  // The middleware matcher lets extension-bearing paths (e.g. /config.xml)
+  // through to this segment — without the guard, toLocale() silently fell
+  // back to 'en' and every unknown single-segment URL served the homepage
+  // with a 200. Scanners and Google both see that as a soft-404 farm.
+  if (lang !== 'en' && lang !== 'el') notFound()
   const locale = toLocale(lang)
 
   return (

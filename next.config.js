@@ -77,6 +77,12 @@ const nextConfig = {
   },
   experimental: {
     optimizePackageImports: ['zod', 'react-icons'],
+    // The container runs on a small cgroup and concurrent sharp jobs can
+    // OOM-kill next-server on cold-cache crawler bursts. One optimization at
+    // a time, streamed decode, and a 40MP input cap keep peak RSS under it.
+    imgOptConcurrency: 1,
+    imgOptSequentialRead: true,
+    imgOptMaxInputPixels: 40000000,
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? {
@@ -145,8 +151,10 @@ const nextConfig = {
             value: 'on'
           },
           {
+            // Deprecated: the browser XSS auditor is gone; 'mode=block' only
+            // re-enables legacy bugs in old browsers. '0' explicitly disables.
             key: 'X-XSS-Protection',
-            value: '1; mode=block'
+            value: '0'
           },
           {
             key: 'X-Frame-Options',
