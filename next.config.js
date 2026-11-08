@@ -19,6 +19,7 @@ function localizedRewrites() {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   async rewrites() {
     return { beforeFiles: localizedRewrites() };
   },
@@ -165,7 +166,7 @@ const nextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' http://localhost:3001 https://localhost:3001 http://api.smholdings.gr https://tiles.openfreemap.org; worker-src 'self' blob:; upgrade-insecure-requests;"
+            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' http://localhost:3001 https://localhost:3001 https://api.smholdings.gr https://tiles.openfreemap.org; worker-src 'self' blob:; upgrade-insecure-requests;"
           }
         ],
       },
