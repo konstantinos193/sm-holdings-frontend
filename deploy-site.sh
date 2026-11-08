@@ -294,8 +294,9 @@ oom_bias_for() {
         redis)                           echo -800 ;;
         stefanos-traefik)                echo -700 ;;
         stefanos-blue|stefanos-green)    echo -500 ;;
-        site-blue|site-green)            echo -300 ;;
-        lincanto-blue|lincanto-green)    echo -250 ;;
+        site-blue|site-green)            echo -200 ;;
+        lincanto-blue|lincanto-green)    echo -300 ;;
+        admin-blue|admin-green)          echo -100 ;;
         *) echo "" ;;
     esac
 }
