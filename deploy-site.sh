@@ -295,6 +295,7 @@ oom_bias_for() {
         stefanos-traefik)                echo -700 ;;
         stefanos-blue|stefanos-green)    echo -500 ;;
         site-blue|site-green)            echo -300 ;;
+        lincanto-blue|lincanto-green)    echo -250 ;;
         *) echo "" ;;
     esac
 }
